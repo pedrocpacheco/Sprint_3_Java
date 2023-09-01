@@ -24,29 +24,11 @@ public class BicycleDAO {
 
   // * Metodo CREATE
   public void insert(Bicycle bicycle){
-    if(bicycle == null){
-      throw new RuntimeException("Bicycle parameter is null!");
-    }
-
-    CustomerDAO customerDAO = new CustomerDAO(DB.getOracleConnection());
-    if(!customerDAO.customerExistsByCpf(bicycle.getOwnerCpf())){
-      throw new IllegalArgumentException("Customer with cpf: " + bicycle.getOwnerCpf() + " does not exist");
-    }
-
-    if(bicycleExistsById(bicycle.getId())){
-      throw new IllegalArgumentException("Bicycle with id: " + bicycle.getId() + " already exists");
-    }
-
-    String query = "INSERT INTO tb_bicycle VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+    String query = "INSERT INTO tb_bicycle (num_serial_number, nm_bicycle, brand_bicycle, price_bicycle, year_bicycle, ds_bicycle, id_bicycle, cpf_customer) " + 
+                  "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
  
     try(PreparedStatement ps = conn.prepareStatement(query)){
-      ps.setInt(1, bicycle.getId());
-      ps.setString(2, bicycle.getModel());
-      ps.setString(3, bicycle.getSerialNumber());
-      ps.setString(4, bicycle.getBrand());
-      ps.setDouble(5, bicycle.getPrice());
-      ps.setString(6, bicycle.getYear());
-      ps.setString(7, bicycle.getDescription());
+      setParameters(ps, bicycle);
       ps.setString(8, bicycle.getOwnerCpf());
       ps.execute();
     } catch(SQLException e){
@@ -63,19 +45,9 @@ public class BicycleDAO {
       ResultSet rs = ps.executeQuery();
 
       while(rs.next()){
-        int id = rs.getInt("id_bicycle");
-        String serialNumber = rs.getString("num_serie_bicycle");
-        String model = rs.getString("nm_bicycle");
-        String brand = rs.getString("brand_bicycle");
-        Double price = rs.getDouble("price_bicycle");
-        String year = rs.getString("year_bicycle");
-        String description = rs.getString("ds_bicycle");
-        CustomerDAO customerDAO = new CustomerDAO(DB.getOracleConnection());
-        Customer customer = customerDAO.findByCpf(rs.getString("cpf_customer"));
-      
-        Bicycle bicycle = new Bicycle(id, serialNumber, model, brand, price, year, description, customer);
-        bicycles.add(bicycle);
+         bicycles.add(bicycleFromResultSet(rs));
       }
+    
     } catch(SQLException e){
       ExceptionHandler.handleSQLException(e, "Error updating Customer");
     }
@@ -84,28 +56,16 @@ public class BicycleDAO {
 
   // ? Metodo FindById
   public Bicycle findById(Integer id){
-    if(!bicycleExistsById(id)){
-      throw new IllegalArgumentException("Bicycle with id: " + id + " does not exist");
-    }
-
     String query = "SELECT * FROM tb_bicycle WHERE id_bicycle = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
       ps.setInt(1, id);
       try(ResultSet rs = ps.executeQuery()){
         if(rs.next()){
-          String serialNumber = rs.getString("num_serie_bicycle");
-          String model = rs.getString("nm_bicycle");
-          String brand = rs.getString("brand_bicycle");
-          Double price = rs.getDouble("price_bicycle");
-          String year = rs.getString("year_bicycle");
-          String description = rs.getString("ds_bicycle");
-          CustomerDAO customerDAO = new CustomerDAO(DB.getOracleConnection());
-          Customer customer = customerDAO.findByCpf(rs.getString("cpf_customer"));
-
-          return new Bicycle(id, serialNumber, model, brand, price, year, description, customer);
+          return bicycleFromResultSet(rs);
         }
       }
+      
     } catch(SQLException e){
       ExceptionHandler.handleSQLException(e, "Error finding bicycle");
     }
@@ -113,12 +73,7 @@ public class BicycleDAO {
   }
 
   // ? Metodo FindByCpfCustomer
-  public List<Bicycle> findByCpfCustomer(String cpf){
-    CustomerDAO customerDAO = new CustomerDAO(DB.getOracleConnection());
-    if(!customerDAO.customerExistsByCpf(cpf)){
-      throw new IllegalArgumentException("Customer with cpf: " + cpf + " does not exist");
-    }
-
+  public List<Bicycle> findByCustomer(String cpf){
     List<Bicycle> bicycles = new ArrayList<>();
     String query = "SELECT * FROM tb_bicycle WHERE cpf_customer = ?";
 
@@ -126,17 +81,7 @@ public class BicycleDAO {
       ps.setString(1, cpf);
       try(ResultSet rs = ps.executeQuery()){
         while(rs.next()){
-          Integer id = rs.getInt("id_bicycle");
-          String serialNumber = rs.getString("num_serie_bicycle");
-          String model = rs.getString("nm_bicycle");
-          String brand = rs.getString("brand_bicycle");
-          Double price = rs.getDouble("price_bicycle");
-          String year = rs.getString("year_bicycle");
-          String description = rs.getString("ds_bicycle");
-          Customer customer = customerDAO.findByCpf(rs.getString("cpf_customer"));
-
-          Bicycle bicycle = new Bicycle(id, serialNumber, model, brand, price, year, description, customer);
-          bicycles.add(bicycle);
+          bicycles.add(bicycleFromResultSet(rs));
           return bicycles;
         }
       }
@@ -149,25 +94,11 @@ public class BicycleDAO {
 
   // * Metodo UPDATE
   public void update(Bicycle bicycle){
-    if(bicycle == null){
-      throw new IllegalArgumentException("Bicycle parameter is null!");
-    }
-    
-    if(!bicycleExistsById(bicycle.getId())){
-      throw new IllegalArgumentException("Bicycle does not exist!");
-    }
-
     String query = "UPDATE tb_bicycle SET num_serie_bicycle = ?, nm_bicycle = ?, " +
         "brand_bicycle = ?, price_bicycle = ?, year_bicycle = ?, ds_bicycle = ? WHERE id_bicycle = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
-      ps.setString(1, bicycle.getSerialNumber());
-      ps.setString(2, bicycle.getModel());
-      ps.setString(3, bicycle.getBrand());
-      ps.setDouble(4, bicycle.getPrice());
-      ps.setString(5, bicycle.getYear());
-      ps.setString(6, bicycle.getDescription());
-      ps.setInt(7, bicycle.getId());
+      setParameters(ps, bicycle);
       ps.executeUpdate();
     } catch(SQLException e){
       ExceptionHandler.handleSQLException(e, "Error updating Bicycle");
@@ -176,14 +107,7 @@ public class BicycleDAO {
 
   // ! Metodo DELETE
   public void delete(Bicycle bicycle){
-    if(bicycle == null){
-      throw new IllegalArgumentException("Bicycle parameter is null!");
-    }
     
-    if(!bicycleExistsById(bicycle.getId())){
-      throw new IllegalArgumentException("Bicycle does not exist");
-    }
-
     String query = "DELETE FROM tb_bicycle WHERE id_bicycle = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
@@ -196,6 +120,7 @@ public class BicycleDAO {
 
   // ? Metodo Existe por ID
   public boolean bicycleExistsById(int id){
+
       String query = "SELECT id_bicycle FROM tb_bicycle WHERE id_bicycle = ?";
 
       try(PreparedStatement ps = conn.prepareStatement(query)){
@@ -206,6 +131,33 @@ public class BicycleDAO {
         ExceptionHandler.handleSQLException(e, "Error checking bicycle existence by ID");
         return false;
       }
+
+  }
+
+  // ? Setanado Parametros
+  private void setParameters(PreparedStatement ps, Bicycle bicycle) throws SQLException{
+      ps.setString(1, bicycle.getSerialNumber());
+      ps.setString(2, bicycle.getModel());
+      ps.setString(3, bicycle.getBrand());
+      ps.setDouble(4, bicycle.getPrice());
+      ps.setString(5, bicycle.getYear());
+      ps.setString(6, bicycle.getDescription());
+      ps.setInt(7, bicycle.getId());
+  }
+
+  // ? Create Bicycle From RS
+  private Bicycle bicycleFromResultSet(ResultSet rs) throws SQLException{
+    Integer id = rs.getInt("id_bicycle");
+    String serialNumber = rs.getString("num_serie_bicycle");
+    String model = rs.getString("nm_bicycle");
+    String brand = rs.getString("brand_bicycle");
+    Double price = rs.getDouble("price_bicycle");
+    String year = rs.getString("year_bicycle");
+    String description = rs.getString("ds_bicycle");
+    CustomerDAO customerDAO = new CustomerDAO(DB.getOracleConnection());
+    Customer customer = customerDAO.findByCpf(rs.getString("cpf_customer"));
+
+    return new Bicycle(id, serialNumber, model, brand, price, year, description, customer);
   }
 
 }
