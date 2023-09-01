@@ -10,9 +10,7 @@ public class CustomerTest {
     CustomerDAO customerDAO = new CustomerDAO(DB.getConnection());
 
     Customer customer = new Customer(77, "Pedro", "pedro@gmail.com", "119935556");
-    String msg = customerDAO.insert(customer);
-
-    System.out.println(msg);
+    customerDAO.insert(customer);
 
   }
 }
