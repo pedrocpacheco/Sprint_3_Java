@@ -24,7 +24,7 @@ public class BicycleDAO {
 
   // * Metodo CREATE
   public void insert(Bicycle bicycle){
-    String query = "INSERT INTO tb_bicycle (num_serie_number, nm_bicycle, brand_bicycle, price_bicycle, year_bicycle, ds_bicycle, id_bicycle, cpf_customer) " + 
+    String query = "INSERT INTO tb_bicycle (num_serie_bicycle, nm_bicycle, brand_bicycle, price_bicycle, year_bicycle, ds_bicycle, id_bicycle, cpf_customer) " + 
                   "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
  
     try(PreparedStatement ps = conn.prepareStatement(query)){

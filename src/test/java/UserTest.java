@@ -10,29 +10,29 @@ import main.java.br.com.bikenow.model.service.user.UserService;
 public class UserTest {
   public static void main(String[] args) {
 
-    // Criando UserService
+    //  * Criando UserService
     UserService userService = new UserService(DB.getOracleConnection());
 
-    // CREATE - Adicionando User
+    // * CREATE - Adicionando User
     User thiago = new User(40, "Thiago", "Fritz", Role.ANALYST);
-    //userService.createUser(thiago);
+    userService.createUser(thiago);
 
-    // READ - Listando Users
+    // ? READ - Listando Users
     List<User> users = userService.findAll();
-    //users.forEach(u -> System.out.println(u.toString()));
+    users.forEach(u -> System.out.println(u.toString()));
 
-    // READ - Find By Id
+    // ? READ - Listando User por ID
     User user = userService.findById(40);
     System.out.println(user.toString());
 
-    // UPDATE- Atualizando User
+    // * UPDATE- Atualizando User
     thiago.setName("AAAAA");
     thiago.setEmail("Cohen");
     thiago.setRole(Role.CUSTOMER);
-    // userService.updateUser(thiago);
+    userService.updateUser(thiago);
 
-    // DELETE - Deletando User
-    // userService.deleteUser(thiago);
+    // ! DELETE - Deletando User
+    userService.deleteUser(thiago);
     
   }
 }
