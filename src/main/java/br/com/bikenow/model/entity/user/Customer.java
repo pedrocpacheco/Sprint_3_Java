@@ -17,6 +17,11 @@ public class Customer extends User{
     return cpf;
   }
 
+  @Override
+  public String toString() {
+    return "Customer [id=" + id + ", name=" + name + ", email=" + email + ", role=" + role + ", cpf=" + cpf + "]";
+  }
+
   // ? Não será permitido mudar o CPF de um Customer já criado
   // ? Por isso não existe um setCPF()
 

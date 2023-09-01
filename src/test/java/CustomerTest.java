@@ -23,9 +23,10 @@ public class CustomerTest {
 
     // ? Listando Customers
     List<Customer> customers = customerDAO.list();
-    //customers.forEach(c -> System.out.println(c.toString()));
+    customers.forEach(c -> System.out.println(c.toString()));
 
     // ! Deletando Customer
     customerDAO.delete(customer);
+    
   }
 }

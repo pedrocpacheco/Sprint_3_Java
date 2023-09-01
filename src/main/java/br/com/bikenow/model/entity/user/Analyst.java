@@ -8,8 +8,8 @@ public class Analyst extends User{
     this.rm = rm;
   }
 
-  public Analyst(Integer id, String name, String email,  Role role, String rm) {
-    super(id, name, email, role);
+  public Analyst(Integer id, String name, String email, String rm) {
+    super(id, name, email, Role.ANALYST);
     this.rm = rm;
   }
 
@@ -19,6 +19,11 @@ public class Analyst extends User{
 
   public void setRm(String rm) {
     this.rm = rm;
+  }
+
+  @Override
+  public String toString() {
+    return "Analyst [id=" + this.id + ", name=" + name + ", email=" + email + ", rm= " + rm + ", role=" + role + "]";
   }  
 
 }

@@ -3,11 +3,11 @@ package main.java.br.com.bikenow.model.entity.user;
 // Tabela "tb_user"
 public class User {
   
-    private Integer id;
+    protected Integer id;
 
-    private String name;
+    protected String name;
 
-    private String email;
+    protected String email;
 
     protected Role role;
 
