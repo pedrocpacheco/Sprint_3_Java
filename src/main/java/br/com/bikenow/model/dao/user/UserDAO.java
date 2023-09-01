@@ -146,7 +146,7 @@ public class UserDAO {
     }
   }
 
-  // ? Metodo de Existe por ID
+  // ? Metodo Existe por ID
   private boolean userExistsById(int userId) {
     String query = "SELECT id_user FROM tb_user WHERE id_user = ?";
 

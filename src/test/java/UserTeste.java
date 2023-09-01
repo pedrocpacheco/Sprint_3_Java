@@ -14,7 +14,7 @@ public class UserTeste {
     UserDAO userDao = new UserDAO(DB.getConnection());
 
     // CREATE - Adicionando User
-    User thiago = new User(2, "Thiago", "Fritz", Role.ANALYST);
+    User thiago = new User(3, "Thiago", "Fritz", Role.ANALYST);
     userDao.insert(thiago);
 
     // READ - Listando Users
