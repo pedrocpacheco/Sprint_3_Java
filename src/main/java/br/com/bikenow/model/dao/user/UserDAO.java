@@ -71,7 +71,7 @@ public class UserDAO {
 
   // * Metodo de Update
   public void update(User user) {
-    String query = "UPDATE tb_user SET nm_user = ?, em_user = ?, role_user = ? WHERE id_user = ?";
+    String query = "UPDATE tb_user SET nm_user = ?, em_user = ? WHERE id_user = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(query)) {
       setParameters(ps, user);
@@ -114,11 +114,10 @@ public class UserDAO {
   }
 
   // ? 
-  private void setParameters(PreparedStatement ps, User user) throws SQLException {
+  /* package */ void setParameters(PreparedStatement ps, User user) throws SQLException {
     ps.setString(1, user.getName());
     ps.setString(2, user.getEmail());
-    ps.setString(3, user.getRole().toString());
-    ps.setInt(4, user.getId());
+    ps.setInt(3, user.getId());
 }
 
   // ? Creat User From RS

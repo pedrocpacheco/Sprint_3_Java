@@ -51,6 +51,7 @@ public class CustomerDAO {
       while(rs.next()){
        customers.add(createCustomerFromResultSet(rs));
       }
+
     } catch (SQLException e) {
       ExceptionHandler.handleSQLException(e, "Error fetching users");
   }
@@ -81,9 +82,8 @@ public class CustomerDAO {
     String query = "UPDATE tb_user SET nm_user = ?, em_user = ? WHERE id_user = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
-      ps.setString(1, customer.getName());
-      ps.setString(2, customer.getEmail());
-      ps.setInt(3, customer.getId());
+      UserDAO userDAO = new UserDAO(DB.getOracleConnection());
+      userDAO.setParameters(ps, customer);
       ps.executeUpdate();
     } catch(SQLException e){
       ExceptionHandler.handleSQLException(e, "Error updating Customer");

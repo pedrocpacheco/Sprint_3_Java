@@ -1,4 +1,4 @@
-package main.java.br.com.bikenow.model.service;
+package main.java.br.com.bikenow.model.service.user;
 
 import java.sql.Connection;
 import java.util.List;
