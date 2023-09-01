@@ -26,12 +26,12 @@ public class BicycleTest {
     bicycles.forEach(b -> System.out.println(b.toString()));
 
     // ? READ - Lendo bicicleta por bicycleId
-    Bicycle bicycle2 = bicycleService.findById(5);
-    System.out.println(bicycle2.toString());
+    Bicycle bicycleById = bicycleService.findById(5);
+    System.out.println(bicycleById.toString());
 
     // ? READ - Lendo bicicletas por customerCpf
-    List<Bicycle> bicyclesByCPF = bicycleService.findByCustomer(bicycle.getOwnerCpf());
-    bicyclesByCPF.forEach(bc -> System.out.println(bc.toString()));
+    List<Bicycle> bicyclesByCpf = bicycleService.findByCustomer(bicycle.getOwnerCpf());
+    bicyclesByCpf.forEach(bc -> System.out.println(bc.toString()));
 
     // * UPDATE - Atualizando Bicicleta
     bicycle.setSerialNumber("1");

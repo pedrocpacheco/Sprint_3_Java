@@ -99,7 +99,10 @@ public class Addon {
     return true;
   }
 
-  
-  
+  @Override
+  public String toString() {
+    return "Addon [id=" + id + ", name=" + name + ", brand=" + brand + ", price=" + price + ", description="
+        + description + ", owner=" + owner + "]";
+  }
 
 }

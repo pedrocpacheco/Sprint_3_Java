@@ -70,7 +70,7 @@ public class AddonDAO {
   // ? Metodo FindByBicycleId
   public List<Addon> findByBicycleId(Integer id){
     List<Addon> addons = new ArrayList<>();
-    String query = "SELECET * FROM tb_addon WHERE id_bicycle = ?";
+    String query = "SELECT * FROM tb_addon WHERE id_bicycle = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
       ps.setInt(1, id);

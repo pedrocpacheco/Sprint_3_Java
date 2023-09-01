@@ -14,25 +14,25 @@ public class UserTest {
     UserService userService = new UserService(DB.getOracleConnection());
 
     // * CREATE - Adicionando User
-    User thiago = new User(40, "Thiago", "Fritz", Role.ANALYST);
-    userService.createUser(thiago);
+    User user = new User(40, "user", "Fritz", Role.ANALYST);
+    userService.createUser(user);
 
     // ? READ - Listando Users
     List<User> users = userService.findAll();
     users.forEach(u -> System.out.println(u.toString()));
 
     // ? READ - Listando User por ID
-    User user = userService.findById(40);
-    System.out.println(user.toString());
+    User userById = userService.findById(40);
+    System.out.println(userById.toString());
 
     // * UPDATE- Atualizando User
-    thiago.setName("AAAAA");
-    thiago.setEmail("Cohen");
-    thiago.setRole(Role.CUSTOMER);
-    userService.updateUser(thiago);
+    user.setName("AAAAA");
+    user.setEmail("Cohen");
+    user.setRole(Role.CUSTOMER);
+    userService.updateUser(user);
 
     // ! DELETE - Deletando User
-    userService.deleteUser(thiago);
+    userService.deleteUser(user);
     
   }
 }

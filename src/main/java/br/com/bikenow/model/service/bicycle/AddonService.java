@@ -28,8 +28,8 @@ public class AddonService {
     }
 
     bicycleDAO = new BicycleDAO(DB.getOracleConnection());
-    if(bicycleDAO.bicycleExistsById(addon.getOwner().getId())){
-      throw new IllegalArgumentException("Bicycle with id: " + addon.getOwner().getId() + " already exist");
+    if(!bicycleDAO.bicycleExistsById(addon.getOwner().getId())){
+      throw new IllegalArgumentException("Addon with id: " + addon.getOwner().getId() + " does not exist");
     } 
 
     addonDAO.insert(addon);

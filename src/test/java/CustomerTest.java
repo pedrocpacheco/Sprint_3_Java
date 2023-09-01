@@ -26,8 +26,8 @@ public class CustomerTest {
     customers.forEach(c -> System.out.println(c.toString()));
 
     // ? READ - Listando por CPF
-    Customer customerFound = customerService.findByCpf(customer.getCpf());
-    System.out.println(customerFound.toString());
+    Customer customerByCpf = customerService.findByCpf(customer.getCpf());
+    System.out.println(customerByCpf.toString());
 
     // ! Deletando Customer
     customerService.deleteCustomer(customer);

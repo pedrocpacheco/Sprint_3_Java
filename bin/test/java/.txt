@@ -1,0 +1,24 @@
+User: PRONTO
+  Create
+  ReadAll
+  ReadById
+  Update
+  Delete
+
+Customer: 
+  Create
+  ReadAll
+  ReadById
+  Update
+  Delete
+
+Analyst: 
+  Create
+  ReadAll
+
+Bicycle:
+  Create
+  ReadAll
+  ReadById
+  ReadByCustomerCPF
+  
