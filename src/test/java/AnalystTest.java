@@ -12,24 +12,24 @@ public class AnalystTest {
     // ? Criando AnalystService
     AnalystService analystService = new AnalystService(DB.getOracleConnection());
 
-    // * Inserindo Analyst
+    // * CREATE - Inserindo Analyst
     Analyst analyst = new Analyst(1000, "Analista99", "analista99@gmail.com", "111132111111");
     analystService.createAnalyst(analyst);
 
-    // ? Listando Analysts
+    // ? READ - Listando Analysts
     List<Analyst> analysts = analystService.findAll();
     analysts.forEach(a -> System.out.println(a.toString()));
 
-    // ? Listando Analyst por Rm
+    // ? READ - Listando Analyst por Rm
     Analyst analystByRm = analystService.findByRm("111132111111");
     System.out.println(analystByRm.toString());
 
-    // * Atualizando Analyst
+    // * UPDATE-  Atualizando Analyst
     analyst.setName("OI");
     analyst.setEmail("dante@gmail.com");
     analystService.updateAnalyst(analyst);
 
-    // ! Deletando Analyst
+    // ! DELETE - Deletando Analyst
     analystService.deleteAnalyst(analyst);
     
   }

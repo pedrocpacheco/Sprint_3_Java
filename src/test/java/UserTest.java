@@ -26,7 +26,7 @@ public class UserTest {
     System.out.println(userById.toString());
 
     // * UPDATE- Atualizando User
-    user.setName("AAAAA");
+    user.setName("Lauren");
     user.setEmail("Cohen");
     user.setRole(Role.CUSTOMER);
     userService.updateUser(user);

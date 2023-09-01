@@ -12,14 +12,9 @@ public class CustomerTest {
     // ? Criando CustomerDAO
     CustomerService customerService = new CustomerService(DB.getOracleConnection());
 
-    // * Inserindo Customer
+    // * CREATE - Inserindo Customer
     Customer customer = new Customer(89, "Pedro", "pedro@gmail.com", "11211111311");
     customerService.createCustomer(customer);
-
-    // * Atualizando Customer
-    customer.setName("Dante");
-    customer.setEmail("Dante@gmail.com");
-    customerService.updateCustomer(customer);
 
     // ? READ - Listando todos
     List<Customer> customers = customerService.findAll();
@@ -28,6 +23,11 @@ public class CustomerTest {
     // ? READ - Listando por CPF
     Customer customerByCpf = customerService.findByCpf(customer.getCpf());
     System.out.println(customerByCpf.toString());
+
+    // * UPDADE - Atualizando Customer
+    customer.setName("Dante");
+    customer.setEmail("Dante@gmail.com");
+    customerService.updateCustomer(customer);
 
     // ! Deletando Customer
     customerService.deleteCustomer(customer);

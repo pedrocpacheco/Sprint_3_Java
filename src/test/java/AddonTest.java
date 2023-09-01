@@ -18,24 +18,24 @@ public class AddonTest {
     Bicycle bicycle = new BicycleDAO(DB.getOracleConnection()).findById(5);
     Addon addon = new Addon(1, "Banco", "Caloi", 1050.50, "D", bicycle);
 
-    //addonService.createAddon(addon);
+    addonService.createAddon(addon);
 
     // ? READ - Listando todos
     List<Addon> addons = addonService.findAll();
-    //addons.forEach(a -> System.out.println(a.toString()));
+    addons.forEach(a -> System.out.println(a.toString()));
 
     // ? READ - Listando por AddonID
     Addon addonById = addonService.findById(addon.getId());
-    // System.out.println(addonById.toString());
+    System.out.println(addonById.toString());
 
     // ? READ - Listando por OwnerCpf
     List<Addon> addonByCpf = addonService.findByBicycleId(addon.getOwner().getId());
-    //addonByCpf.forEach(ac -> System.out.println(ac.toString()));
+    addonByCpf.forEach(ac -> System.out.println(ac.toString()));
     
     // * UPDATE - Atualizando Addon
     addon.setName("Guidão");
     addon.setBrand("Revolution");
-    // addonService.updateBicycle(addon);
+    addonService.updateBicycle(addon);
     System.out.println(addon.toString());
     
     // ! DELETE - Deletando Addon
