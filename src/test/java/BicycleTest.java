@@ -2,7 +2,6 @@ package test.java;
 
 import java.util.List;
 
-import main.java.br.com.bikenow.model.dao.bicycle.BicycleDAO;
 import main.java.br.com.bikenow.model.dao.user.CustomerDAO;
 import main.java.br.com.bikenow.model.entity.bicycle.Bicycle;
 import main.java.br.com.bikenow.model.entity.user.Customer;
