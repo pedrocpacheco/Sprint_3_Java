@@ -22,28 +22,11 @@ public class AddonDAO {
 
   // * Metodo CREATE
   public void insert(Addon addon){
-    if(addon == null){
-      throw new IllegalArgumentException("Addon parameter is null!");
-    }
-
-    BicycleDAO bicycleDAO = new BicycleDAO(DB.getOracleConnection());
-    if(bicycleDAO.bicycleExistsById(addon.getOwner().getId())){
-      throw new IllegalArgumentException("Bicycle with id: " + addon.getOwner().getId() + " already exist");
-    } 
-
-    if(addonExistsById(addon.getId())){
-      throw new IllegalArgumentException("Addon with id: " + addon.getId() + " already exists");
-    }
-
-    String query = "INSERT INTO tb_addon VALUES(?, ?, ?, ?, ?, ?)";
+    String query = "INSERT INTO tb_addon (nm_addon, brand_addon, price_addon, ds_addon, id_addon, id_bicycle) VALUES(?, ?, ?, ?, ?, ?)";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
-      ps.setInt(1, addon.getId());
-      ps.setString(2, addon.getName());
-      ps.setString(3, addon.getBrand());
-      ps.setDouble(4, addon.getPrice());
-      ps.setString(5, addon.getDescription());
-      ps.setString(6, addon.getOwner().getSerialNumber());
+      setParameters(ps, addon);
+      ps.setInt(6, addon.getOwner().getId());
       ps.execute();
     } catch(SQLException e){
       ExceptionHandler.handleSQLException(e, "Error inserting Addon");
@@ -58,16 +41,7 @@ public class AddonDAO {
     try(PreparedStatement ps = conn.prepareStatement(query)){
       try(ResultSet rs = ps.executeQuery()){
         while(rs.next()){
-          int id = rs.getInt("id_addon");
-          String name = rs.getString("nm_addon");
-          String brand = rs.getString("brand_addon");
-          Double price = rs.getDouble("price_addon");
-          String description = rs.getString("ds_addon");
-          BicycleDAO bicycleDAO = new BicycleDAO(DB.getOracleConnection());
-          Bicycle bicycle = bicycleDAO.findById(rs.getInt("id_bicycle"));
-
-          Addon addon = new Addon(id, name, brand, price, description, bicycle);
-          addons.add(addon);
+          addons.add(addonFromResultSet(rs));
         }
       }
     } catch(SQLException e){
@@ -78,25 +52,13 @@ public class AddonDAO {
 
   // ? Metodo Find By Id
   public Addon findById(Integer id){
-    if(!addonExistsById(id)){
-      throw new IllegalArgumentException("Addon with id: " + id + " does not exist");
-    }
-
     String query = "SELECT * from tb_addon WHERE id_addon = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
       ps.setInt(1, id);
       try(ResultSet rs = ps.executeQuery()){
         if(rs.next()){
-          String name = rs.getString("nm_addon");
-          String brand = rs.getString("brand_addon");
-          Double price = rs.getDouble("price_addon");
-          String description = rs.getString("ds_addon");
-          BicycleDAO bicycleDAO = new BicycleDAO(DB.getOracleConnection());
-          Bicycle bicycle = bicycleDAO.findById(rs.getInt("id_bicycle"));
-
-          Addon addon = new Addon(id, name, brand, price, description, bicycle);
-          return addon;
+          return addonFromResultSet(rs);
         }
       }
     } catch(SQLException e){
@@ -107,11 +69,6 @@ public class AddonDAO {
 
   // ? Metodo FindByBicycleId
   public List<Addon> findByBicycleId(Integer id){
-    BicycleDAO bicycleDAO = new BicycleDAO(DB.getOracleConnection());
-    if(!bicycleDAO.bicycleExistsById(id)){
-      throw new IllegalArgumentException("Bicycle with cpf: " + id + " does not exist");
-    }
-
     List<Addon> addons = new ArrayList<>();
     String query = "SELECET * FROM tb_addon WHERE id_bicycle = ?";
 
@@ -119,14 +76,7 @@ public class AddonDAO {
       ps.setInt(1, id);
       try(ResultSet rs = ps.executeQuery()){
         while(rs.next()){
-          String name = rs.getString("nm_addon");
-          String brand = rs.getString("brand_addon");
-          Double price = rs.getDouble("price_addon");
-          String description = rs.getString("ds_addon");
-          Bicycle bicycle = bicycleDAO.findById(rs.getInt("id_bicycle"));
-
-          Addon addon = new Addon(id, name, brand, price, description, bicycle);
-          addons.add(addon);
+          addons.add(addonFromResultSet(rs));
         }
       }
     } catch(SQLException e){
@@ -137,37 +87,18 @@ public class AddonDAO {
 
   // * Metodo UPDATE 
   public void update(Addon addon){
-    if(addon == null){
-      throw new IllegalArgumentException("Addon parameter is null!");
-    }
-
-    if(!addonExistsById(addon.getId())){
-      throw new IllegalArgumentException("Addon does not exist!");
-    }
-
-    String query = "UPDATE tb_addon SET nm_addon = ?, brand_addon = ?, price_addon = ?, ds_addon = ?";
+    String query = "UPDATE tb_addon SET nm_addon = ?, brand_addon = ?, price_addon = ?, ds_addon = ? WHERE id_addon = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
-        ps.setString(1, addon.getName());
-        ps.setString(2, addon.getBrand());
-        ps.setDouble(3, addon.getPrice());
-        ps.setString(4, addon.getDescription());
+        setParameters(ps, addon);
         ps.executeUpdate();
     } catch(SQLException e){
-      ExceptionHandler.handleSQLException(e, "Error inserting Bicycle");
+        ExceptionHandler.handleSQLException(e, "Error inserting Bicycle");
     }
   }
 
   // ! Metodo Delete
   public void delete(Addon addon){
-    if(addon == null){
-      throw new IllegalArgumentException("Addon parameter is null");
-    }
-
-    if(!addonExistsById(addon.getId())){
-      throw new IllegalArgumentException("Addon does not exist");
-    }
-
     String query = "DELETE FROM tb_addon WHERE id_addon = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
@@ -180,7 +111,7 @@ public class AddonDAO {
 
 
   // ? Metodo Existe por ID
-  private boolean addonExistsById(int id){
+  public boolean addonExistsById(int id){
       String query = "SELECT id_addon FROM tb_addon WHERE id_addon = ?";
 
       try(PreparedStatement ps = conn.prepareStatement(query)){
@@ -191,6 +122,28 @@ public class AddonDAO {
         ExceptionHandler.handleSQLException(e, "Error checking Addon existence by ID");
         return false;
       }
+  }
+
+  // ? Setanado Parametros
+  private void setParameters(PreparedStatement ps, Addon addon) throws SQLException{
+      ps.setString(1, addon.getName());
+      ps.setString(2, addon.getBrand());
+      ps.setDouble(3, addon.getPrice());
+      ps.setString(4, addon.getDescription());
+      ps.setInt(5, addon.getId());
+  }
+
+  // ? Create Addon From RS
+  private Addon addonFromResultSet(ResultSet rs) throws SQLException{
+    int id = rs.getInt("id_addon");
+    String name = rs.getString("nm_addon");
+    String brand = rs.getString("brand_addon");
+    Double price = rs.getDouble("price_addon");
+    String description = rs.getString("ds_addon");
+    BicycleDAO bicycleDAO = new BicycleDAO(DB.getOracleConnection());
+    Bicycle bicycle = bicycleDAO.findById(rs.getInt("id_bicycle"));
+
+    return new Addon(id, name, brand, price, description, bicycle);
   }
 
 }

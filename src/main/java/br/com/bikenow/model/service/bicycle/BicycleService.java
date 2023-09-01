@@ -12,7 +12,7 @@ public class BicycleService {
 
   private BicycleDAO bicycleDAO;
 
-  private CustomerDAO customerDAO;
+  private CustomerDAO customerDAO = null;
 
   public BicycleService(Connection connection){
     this.bicycleDAO = new BicycleDAO(connection);
