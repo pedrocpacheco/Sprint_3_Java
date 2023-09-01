@@ -32,7 +32,7 @@ public class Bicycle {
     this.price = price;
     this.year = year;
     this.description = description;
-    setOwner(owner);
+    this.owner = owner;
   }
 
   public Integer getId() {

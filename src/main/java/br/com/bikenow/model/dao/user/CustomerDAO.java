@@ -67,7 +67,7 @@ public class CustomerDAO {
       
       try (ResultSet rs = ps.executeQuery()) {
         if (rs.next()) {
-          createCustomerFromResultSet(rs);
+          return createCustomerFromResultSet(rs);
         }
       }
     } catch (SQLException e) {

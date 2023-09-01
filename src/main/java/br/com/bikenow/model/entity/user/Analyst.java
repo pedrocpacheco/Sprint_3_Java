@@ -10,7 +10,7 @@ public class Analyst extends User{
 
   public Analyst(Integer id, String name, String email, String rm) {
     super(id, name, email, Role.ANALYST);
-    this.rm = rm;
+    setRm(rm);
   }
 
   public String getRm() {
@@ -18,6 +18,10 @@ public class Analyst extends User{
   }
 
   public void setRm(String rm) {
+    if (rm.length() != 12){
+      System.out.println(rm.length() + "qaaaaaa");
+      throw new IllegalArgumentException("RM must have 12 caracters with only numbers");
+    }
     this.rm = rm;
   }
 

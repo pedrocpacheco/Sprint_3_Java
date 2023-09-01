@@ -22,10 +22,11 @@ public class UserDAO {
 
   // * Metodo de Insert
   public void insert(User user) {
-    String query = "INSERT INTO tb_user (nm_user, em_user, role_user, id_user) VALUES (?, ?, ?, ?)";
+    String query = "INSERT INTO tb_user (nm_user, em_user, id_user, role_user) VALUES (?, ?, ?, ?)";
 
     try (PreparedStatement ps = conn.prepareStatement(query)) {
       setParameters(ps, user);
+      ps.setString(4, user.getRole().toString());
       ps.executeUpdate();
     } catch (SQLException e) {
       ExceptionHandler.handleSQLException(e, "Error inserting User");
@@ -51,7 +52,7 @@ public class UserDAO {
   }
 
   // ? Metodo de FinByID
-  public User findById(int id) {
+  public User findById(Integer id) {
     String query = "SELECT * FROM tb_user WHERE id_user = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -59,7 +60,7 @@ public class UserDAO {
       
       try (ResultSet rs = ps.executeQuery()) {
         if (rs.next()) {
-          createUserFromResultSet(rs);
+          return createUserFromResultSet(rs);
         }
       }
     } catch (SQLException e) {

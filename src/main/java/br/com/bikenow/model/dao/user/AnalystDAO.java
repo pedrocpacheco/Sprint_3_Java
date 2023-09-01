@@ -61,6 +61,24 @@ public class AnalystDAO {
     return analysts;
   }
 
+  public Analyst findByRm(String rm) {
+    String query = "SELECT * FROM tb_analyst WHERE rm_analyst = ?";
+
+    try (PreparedStatement ps = conn.prepareStatement(query)) {
+      ps.setString(1, rm);
+      
+      try (ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) {
+          return createAnalystFromResultSet(rs);
+        }
+      }
+    } catch (SQLException e) {
+      ExceptionHandler.handleSQLException(e, "Error Finding Analyst RM");
+    }
+
+    return null;
+  }
+
   // * Metodo UPDATE
   public void update(Analyst analyst){
     String queryUser = "UPDATE tb_user SET nm_user = ?, em_user = ? WHERE id_user = ?";
@@ -94,6 +112,21 @@ public class AnalystDAO {
     }
   }
 
+  // ? Metodo Existe por RM
+  public boolean analystExistsByRm(String rm){
+    String query = "SELECT rm_analyst FROM tb_analyst WHERE rm_analyst = ?";
+
+    try(PreparedStatement ps = conn.prepareStatement(query)){
+      ps.setString(1, rm);
+      ResultSet rs = ps.executeQuery();
+      return rs.next();
+    } catch(SQLException e){
+      ExceptionHandler.handleSQLException(e, "Error checking customer existence by ID");
+      return false;
+    }
+  }
+
+
   // ? Metodo Existe por ID
   public boolean analystExistsById(int id){
       String query = "SELECT id_user FROM tb_analyst WHERE id_user = ?";
@@ -112,7 +145,7 @@ public class AnalystDAO {
   private Analyst createAnalystFromResultSet(ResultSet rs) throws SQLException{
     UserDAO userDAO = new UserDAO(DB.getOracleConnection());
     User user = userDAO.findById(rs.getInt("id_user"));
-    String rm = rs.getString("rm_analyst").strip();
+    String rm = rs.getString("rm_analyst");
        
     return new Analyst(user.getId(), user.getName(), user.getEmail(), rm);  
   }
