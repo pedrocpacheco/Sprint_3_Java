@@ -2,7 +2,6 @@ package test.java;
 
 import java.util.List;
 
-import main.java.br.com.bikenow.model.dao.user.UserDAO;
 import main.java.br.com.bikenow.model.entity.user.Role;
 import main.java.br.com.bikenow.model.entity.user.User;
 import main.java.br.com.bikenow.model.infra.db.DB;
@@ -15,20 +14,25 @@ public class UserTest {
     UserService userService = new UserService(DB.getOracleConnection());
 
     // CREATE - Adicionando User
-    User thiago = new User(34, "Thiago", "Fritz", Role.ANALYST);
-    userService.createUser(thiago);
+    User thiago = new User(40, "Thiago", "Fritz", Role.ANALYST);
+    //userService.createUser(thiago);
 
     // READ - Listando Users
     List<User> users = userService.findAll();
-    users.forEach(u -> System.out.println(u.toString()));
+    //users.forEach(u -> System.out.println(u.toString()));
+
+    // READ - Find By Id
+    User user = userService.findById(40);
+    System.out.println(user.toString());
 
     // UPDATE- Atualizando User
-    thiago.setName("Cesar");
-    thiago.setName("Cohen");
+    thiago.setName("AAAAA");
+    thiago.setEmail("Cohen");
     thiago.setRole(Role.CUSTOMER);
-    //userService.update(thiago);
+    // userService.updateUser(thiago);
 
     // DELETE - Deletando User
-    //userService.deleteUser(thiago);
+    // userService.deleteUser(thiago);
+    
   }
 }
