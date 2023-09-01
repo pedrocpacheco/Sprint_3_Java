@@ -1,6 +1,8 @@
 package main.java.br.com.bikenow.model.entity.bicycle;
 
+import main.java.br.com.bikenow.model.dao.user.CustomerDAO;
 import main.java.br.com.bikenow.model.entity.user.Customer;
+import main.java.br.com.bikenow.model.infra.db.DB;
 
 public class Bicycle {
   
@@ -88,7 +90,8 @@ public class Bicycle {
   }
 
   public void setOwner(Customer customer) {
-    this.owner = customer;
+    CustomerDAO customerDAO = new CustomerDAO(DB.getOracleConnection());
+    customerDAO.
   }
 
   public String getModel() {

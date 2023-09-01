@@ -28,6 +28,11 @@ public class BicycleDAO {
       throw new RuntimeException("Bicycle parameter is null!");
     }
 
+    CustomerDAO customerDAO = new CustomerDAO(DB.getOracleConnection());
+    if(!customerDAO.customerExistsByCpf(bicycle.getOwnerCpf())){
+      throw new IllegalArgumentException("Customer with cpf: " + bicycle.getOwnerCpf() + " does not exist");
+    }
+
     if(bicycleExistsById(bicycle.getId())){
       throw new IllegalArgumentException("Bicycle with id: " + bicycle.getId() + " already exists");
     }
@@ -102,7 +107,7 @@ public class BicycleDAO {
         }
       }
     } catch(SQLException e){
-      throw new IllegalArgumentException("Customer with id: " + id + " does not exist");
+      ExceptionHandler.handleSQLException(e, "Error finding bicycle");
     }
     return null;
   }
@@ -136,7 +141,7 @@ public class BicycleDAO {
         }
       }
     } catch(SQLException e){
-      throw new IllegalArgumentException("Customer with id: " + cpf + " does not exist");
+      ExceptionHandler.handleSQLException(e, "Error finding Bicycle");
     }
     return null;
 
@@ -190,7 +195,7 @@ public class BicycleDAO {
 }
 
   // ? Metodo Existe por ID
-  private boolean bicycleExistsById(int id){
+  public boolean bicycleExistsById(int id){
       String query = "SELECT id_bicycle FROM tb_bicycle WHERE id_bicycle = ?";
 
       try(PreparedStatement ps = conn.prepareStatement(query)){

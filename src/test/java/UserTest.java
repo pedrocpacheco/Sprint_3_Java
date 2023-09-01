@@ -7,7 +7,7 @@ import main.java.br.com.bikenow.model.entity.user.Role;
 import main.java.br.com.bikenow.model.entity.user.User;
 import main.java.br.com.bikenow.model.infra.db.DB;
 
-public class UserTeste {
+public class UserTest {
   public static void main(String[] args) {
 
     // Criando UserDAO
