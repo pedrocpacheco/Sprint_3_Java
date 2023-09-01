@@ -54,4 +54,16 @@ public class CustomerService {
     customerDAO.update(customer);
   }
 
+  public void deleteCustomer(Customer customer){
+    if (customer == null) {
+      throw new IllegalArgumentException("Customer parameter is null!");
+    }
+
+    if(!customerDAO.customerExistsByCpf(customer.getCpf())){
+      throw new IllegalArgumentException("User with id: " + customer.getCpf() + " does not exist");
+    }
+
+    customerDAO.delete(customer);
+  }
+
 }

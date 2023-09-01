@@ -20,7 +20,12 @@ public class AnalystService {
     }
 
     if(analystDAO.analystExistsById(analyst.getId())){ 
+      System.out.println(analyst.getId());
       throw new IllegalArgumentException("Analyst with id: " + analyst.getId() + " already exists");
+    }
+
+    if(analystDAO.analystExistsByRm(analyst.getRm())){ 
+      throw new IllegalArgumentException("Analyst with rm: " + analyst.getId() + " already exists");
     }
 
     analystDAO.insert(analyst);
@@ -40,6 +45,14 @@ public class AnalystService {
     }
 
     analystDAO.update(analyst);
+  }
+
+  public Analyst findByRm(String rm){
+    if (!analystDAO.analystExistsByRm(rm)) {
+      throw new IllegalArgumentException("Customer with rm: " + rm + " does not exist");
+    }
+
+    return analystDAO.findByRm(rm);
   }
 
   public void deleteAnalyst(Analyst analyst){
