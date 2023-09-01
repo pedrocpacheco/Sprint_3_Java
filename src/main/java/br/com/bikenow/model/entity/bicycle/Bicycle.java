@@ -1,8 +1,6 @@
 package main.java.br.com.bikenow.model.entity.bicycle;
 
-import main.java.br.com.bikenow.model.dao.user.CustomerDAO;
 import main.java.br.com.bikenow.model.entity.user.Customer;
-import main.java.br.com.bikenow.model.infra.db.DB;
 
 public class Bicycle {
   
@@ -39,10 +37,6 @@ public class Bicycle {
 
   public Integer getId() {
     return id.intValue();
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
   }
 
   public String getSerialNumber() {

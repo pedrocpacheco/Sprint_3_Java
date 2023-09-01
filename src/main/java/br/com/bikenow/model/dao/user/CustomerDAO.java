@@ -42,7 +42,6 @@ public class CustomerDAO {
       if(!userDAO.userExistsById(customer.getId())){
         userDAO.insert(new User(customer.getId(), customer.getName(), 
                                customer.getEmail(), customer.getRole()));
-        System.out.println("entrei aqui");
       }
 
       ps.setString(1, customer.getCpf());
@@ -112,9 +111,9 @@ public class CustomerDAO {
       throw new IllegalArgumentException("Customer with id: " + customer.getCpf() + " does not exists");
     }
 
-    String queryUser = "UPDATE tb_user SET nm_user = ?, em_user = ? WHERE id_user = ?";
+    String query = "UPDATE tb_user SET nm_user = ?, em_user = ? WHERE id_user = ?";
 
-    try(PreparedStatement ps = conn.prepareStatement(queryUser)){
+    try(PreparedStatement ps = conn.prepareStatement(query)){
       ps.setString(1, customer.getName());
       ps.setString(2, customer.getEmail());
       ps.setInt(3, customer.getId());

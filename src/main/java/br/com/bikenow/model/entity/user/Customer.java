@@ -21,7 +21,6 @@ public class Customer extends User{
     if (cpf.length() != 11){
       throw new IllegalArgumentException("CPF must have 11 caracters with only numbers");
     }
-    System.out.println("setou cpf" + cpf.length());
     this.cpf = cpf;
   }
 

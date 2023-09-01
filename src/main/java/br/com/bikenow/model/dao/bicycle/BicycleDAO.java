@@ -42,13 +42,11 @@ public class BicycleDAO {
       ps.setDouble(5, bicycle.getPrice());
       ps.setString(6, bicycle.getYear());
       ps.setString(7, bicycle.getDescription());
-      System.out.println(bicycle.getOwnerCpf());
       ps.setString(8, bicycle.getOwnerCpf());
       ps.execute();
     } catch(SQLException e){
-      ExceptionHandler.handleSQLException(e, "Error updating Customer");
+      ExceptionHandler.handleSQLException(e, "Error inserting Bicycle");
     }
-
   }
 
   // ? Metodo List
@@ -110,18 +108,19 @@ public class BicycleDAO {
   }
 
   // ? Metodo FindByCpfCustomer
-  public Bicycle findByCpfCustomer(String cpf){
+  public List<Bicycle> findByCpfCustomer(String cpf){
     CustomerDAO customerDAO = new CustomerDAO(DB.getOracleConnection());
-    if(customerDAO.customerExistsByCpf(cpf)){
+    if(!customerDAO.customerExistsByCpf(cpf)){
       throw new IllegalArgumentException("Customer with cpf: " + cpf + " does not exist");
     }
 
+    List<Bicycle> bicycles = new ArrayList<>();
     String query = "SELECT * FROM tb_bicycle WHERE cpf_customer = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
       ps.setString(1, cpf);
       try(ResultSet rs = ps.executeQuery()){
-        if(rs.next()){
+        while(rs.next()){
           Integer id = rs.getInt("id_bicycle");
           String serialNumber = rs.getString("num_serie_bicycle");
           String model = rs.getString("nm_bicycle");
@@ -131,7 +130,9 @@ public class BicycleDAO {
           String description = rs.getString("ds_bicycle");
           Customer customer = customerDAO.findByCpf(rs.getString("cpf_customer"));
 
-          return new Bicycle(id, serialNumber, model, brand, price, year, description, customer);
+          Bicycle bicycle = new Bicycle(id, serialNumber, model, brand, price, year, description, customer);
+          bicycles.add(bicycle);
+          return bicycles;
         }
       }
     } catch(SQLException e){
@@ -140,6 +141,53 @@ public class BicycleDAO {
     return null;
 
   }
+
+  // * Metodo UPDATE
+  public void update(Bicycle bicycle){
+    if(bicycle == null){
+      throw new IllegalArgumentException("Bicycle parameter is null!");
+    }
+    
+    if(!bicycleExistsById(bicycle.getId())){
+      throw new IllegalArgumentException("Bicycle does not exist!");
+    }
+
+    String query = "UPDATE tb_bicycle SET num_serie_bicycle = ?, nm_bicycle = ?, " +
+        "brand_bicycle = ?, price_bicycle = ?, year_bicycle = ?, ds_bicycle = ? WHERE id_bicycle = ?";
+
+    try(PreparedStatement ps = conn.prepareStatement(query)){
+      ps.setString(1, bicycle.getSerialNumber());
+      ps.setString(2, bicycle.getModel());
+      ps.setString(3, bicycle.getBrand());
+      ps.setDouble(4, bicycle.getPrice());
+      ps.setString(5, bicycle.getYear());
+      ps.setString(6, bicycle.getDescription());
+      ps.setInt(7, bicycle.getId());
+      ps.executeUpdate();
+    } catch(SQLException e){
+      ExceptionHandler.handleSQLException(e, "Error updating Bicycle");
+    }
+  }
+
+  // ! Metodo DELETE
+  public void delete(Bicycle bicycle){
+    if(bicycle == null){
+      throw new IllegalArgumentException("Bicycle parameter is null!");
+    }
+    
+    if(!bicycleExistsById(bicycle.getId())){
+      throw new IllegalArgumentException("Bicycle does not exist");
+    }
+
+    String query = "DELETE FROM tb_bicycle WHERE id_bicycle = ?";
+
+    try(PreparedStatement ps = conn.prepareStatement(query)){
+      ps.setInt(1, bicycle.getId());
+      ps.executeUpdate();
+    } catch(SQLException e){
+      ExceptionHandler.handleSQLException(e, "Error deleting Bicycle");
+    }
+}
 
   // ? Metodo Existe por ID
   private boolean bicycleExistsById(int id){
@@ -153,7 +201,6 @@ public class BicycleDAO {
         ExceptionHandler.handleSQLException(e, "Error checking bicycle existence by ID");
         return false;
       }
- 
   }
 
 }
