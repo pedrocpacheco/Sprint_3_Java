@@ -23,14 +23,6 @@ public class AnalystDAO {
 
   // * Metodo CREATE
   public void insert(Analyst analyst) {
-    if(analyst == null){
-      throw new RuntimeException("Analyst parameter is null!");
-    }
-
-    if(analystExistsById(analyst.getId())){ 
-      throw new IllegalArgumentException("Analyst with id: " + analyst.getId() + " already exists");
-    }
-
     String query = "INSERT INTO tb_analyst VALUES (?, ?)";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
@@ -60,14 +52,9 @@ public class AnalystDAO {
       ResultSet rs = ps.executeQuery();
 
       while(rs.next()){
-        UserDAO userDAO = new UserDAO(DB.getOracleConnection());
-        User user = userDAO.findById(rs.getInt("id_user"));
-        String rm = rs.getString("rm_analyst").strip();
-       
-        Analyst analyst = new Analyst(user.getId(), user.getName(), user.getEmail(), rm);
-        analysts.add(analyst);
-        System.out.println("Added " + user.getName());
+        analysts.add(createAnalystFromResultSet(rs));
       }
+      
     } catch (SQLException e) {
       ExceptionHandler.handleSQLException(e, "Error reading analyst");
   }
@@ -76,20 +63,11 @@ public class AnalystDAO {
 
   // * Metodo UPDATE
   public void update(Analyst analyst){
-    if(analyst == null){
-      throw new IllegalArgumentException("Analyst parameter is null!");
-    }
-
-    if(!analystExistsById(analyst.getId())){ 
-      throw new IllegalArgumentException("analyst with id: " + analyst.getId() + " does not exists");
-    }
-
     String queryUser = "UPDATE tb_user SET nm_user = ?, em_user = ? WHERE id_user = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(queryUser)){
-      ps.setString(1, analyst.getName());
-      ps.setString(2, analyst.getEmail());
-      ps.setInt(3, analyst.getId());
+      UserDAO userDAO = new UserDAO(DB.getOracleConnection());
+      userDAO.setParameters(ps, analyst);
       ps.executeUpdate();
     } catch(SQLException e){
       ExceptionHandler.handleSQLException(e, "Error updating analyst");
@@ -98,14 +76,6 @@ public class AnalystDAO {
 
   // ! Metodo DELETE
   public void delete(Analyst analyst){
-    if (analyst == null) {
-      throw new IllegalArgumentException("analyst parameter is null!");
-    }
-
-    if(!analystExistsById(analyst.getId())){
-      throw new IllegalArgumentException("User with id: " + analyst.getRm() + " does not exist");
-    }
-
     String query = "DELETE FROM tb_analyst WHERE id_user = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)) {
@@ -125,7 +95,7 @@ public class AnalystDAO {
   }
 
   // ? Metodo Existe por ID
-  private boolean analystExistsById(int id){
+  public boolean analystExistsById(int id){
       String query = "SELECT id_user FROM tb_analyst WHERE id_user = ?";
 
       try(PreparedStatement ps = conn.prepareStatement(query)){
@@ -136,7 +106,15 @@ public class AnalystDAO {
         ExceptionHandler.handleSQLException(e, "Error checking customer existence by ID");
         return false;
       }
- 
+  }
+
+// ? Create Analyst From ResultSet
+  private Analyst createAnalystFromResultSet(ResultSet rs) throws SQLException{
+    UserDAO userDAO = new UserDAO(DB.getOracleConnection());
+    User user = userDAO.findById(rs.getInt("id_user"));
+    String rm = rs.getString("rm_analyst").strip();
+       
+    return new Analyst(user.getId(), user.getName(), user.getEmail(), rm);  
   }
 
 }
