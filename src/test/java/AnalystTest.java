@@ -13,7 +13,7 @@ public class AnalystTest {
     AnalystDAO analystDAO = new AnalystDAO(DB.getOracleConnection());
 
     // * Inserindo Customer
-    Analyst analyst = new Analyst(99, "Pedro", "pedro@gmail.com", "9999");
+    Analyst analyst = new Analyst(99, "Analista99", "analista99@gmail.com", "9999");
     analystDAO.insert(analyst);
 
     // * Atualizando Customer

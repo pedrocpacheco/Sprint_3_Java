@@ -10,11 +10,19 @@ public class Customer extends User{
 
   public Customer(Integer id, String name, String email, String cpf) {
     super(id, name, email, Role.CUSTOMER);
-    this.cpf = cpf;
+    setCPF(cpf);;
   }
 
   public String getCpf() {
     return cpf;
+  }
+
+  private void setCPF(String cpf){
+    if (cpf.length() != 11){
+      throw new IllegalArgumentException("CPF must have 11 caracters with only numbers");
+    }
+    System.out.println("setou cpf" + cpf.length());
+    this.cpf = cpf;
   }
 
   @Override

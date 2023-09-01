@@ -24,18 +24,21 @@ public class CustomerDAO {
   // * Metodo CREATE
   public void insert(Customer customer) {
     if(customer == null){
-      throw new RuntimeException("Customer parameter is null!");
+      throw new IllegalArgumentException("Customer parameter is null!");
     }
 
-    if(customerExistsById(customer.getId())){ 
-      throw new IllegalArgumentException("Customer with id: " + customer.getId() + " already exists");
+    if(customerExistsById(customer.getId())){
+      throw new IllegalArgumentException("Customer with id: " + customer.getId() + " already exist");
+    }
+
+    if(customerExistsByCpf(customer.getCpf())){
+      throw new IllegalArgumentException("Customer with cpf: " + customer.getCpf() + " already exist");
     }
 
     String query = "INSERT INTO tb_customer VALUES (?, ?)";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
       UserDAO userDAO = new UserDAO(DB.getOracleConnection());
-
       if(!userDAO.userExistsById(customer.getId())){
         userDAO.insert(new User(customer.getId(), customer.getName(), 
                                customer.getEmail(), customer.getRole()));
@@ -46,8 +49,7 @@ public class CustomerDAO {
       ps.setInt(2, customer.getId());
       ps.execute();
     } catch(SQLException e){
-      System.err.println("Error inserting Customer");
-      e.printStackTrace();
+      ExceptionHandler.handleSQLException(e, "Error inserting Customer");
     }
   }
 
@@ -66,12 +68,38 @@ public class CustomerDAO {
        
         Customer customer = new Customer(user.getId(), user.getName(), user.getEmail(), cpf);
         customers.add(customer);
-        System.out.println("Added " + user.getName());
       }
     } catch (SQLException e) {
       ExceptionHandler.handleSQLException(e, "Error fetching users");
   }
     return customers;
+  }
+
+  // ? Metodo de FinByID
+  public Customer findByCpf(String cpf) {
+    if (!customerExistsByCpf(cpf)) {
+      throw new IllegalArgumentException("Customer with id: " + cpf + " does not exist");
+    }
+
+    String query = "SELECT * FROM tb_customer WHERE cpf_customer = ?";
+
+    try (PreparedStatement ps = conn.prepareStatement(query)) {
+      ps.setString(1, cpf);
+      
+      try (ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) {
+          UserDAO userDAO = new UserDAO(DB.getOracleConnection());
+          User user = userDAO.findById(rs.getInt("id_user"));
+          String cpfGetted = rs.getString("cpf_customer");
+
+          return new Customer(user.getId(), user.getName(), user.getEmail(), cpfGetted);
+        }
+      }
+    } catch (SQLException e) {
+      ExceptionHandler.handleSQLException(e, "Error Finding User ID");
+    }
+
+    return null;
   }
 
   // * Metodo UPDATE
@@ -80,8 +108,8 @@ public class CustomerDAO {
       throw new IllegalArgumentException("Customer parameter is null!");
     }
 
-    if(!customerExistsById(customer.getId())){ 
-      throw new IllegalArgumentException("Customer with id: " + customer.getId() + " does not exists");
+    if(!customerExistsByCpf(customer.getCpf())){ 
+      throw new IllegalArgumentException("Customer with id: " + customer.getCpf() + " does not exists");
     }
 
     String queryUser = "UPDATE tb_user SET nm_user = ?, em_user = ? WHERE id_user = ?";
@@ -102,7 +130,7 @@ public class CustomerDAO {
       throw new IllegalArgumentException("Customer parameter is null!");
     }
 
-    if(!customerExistsById(customer.getId())){
+    if(!customerExistsByCpf(customer.getCpf())){
       throw new IllegalArgumentException("User with id: " + customer.getCpf() + " does not exist");
     }
 
@@ -124,19 +152,24 @@ public class CustomerDAO {
     }
   }
 
-  // ? Metodo Existe por ID
-  private boolean customerExistsById(int id){
-      String query = "SELECT id_user FROM tb_customer WHERE id_user = ?";
+  // ? Metodo Existe por CPF
+  public boolean customerExistsByCpf(String cpf){
+      String query = "SELECT cpf_customer FROM tb_customer WHERE cpf_customer = ?";
 
       try(PreparedStatement ps = conn.prepareStatement(query)){
-        ps.setInt(1, id);
+        ps.setString(1, cpf);
         ResultSet rs = ps.executeQuery();
         return rs.next();
       } catch(SQLException e){
         ExceptionHandler.handleSQLException(e, "Error checking customer existence by ID");
         return false;
       }
- 
+  }
+
+  // ? Metodo Existe por ID
+  public boolean customerExistsById(Integer id){
+    UserDAO userDAO = new UserDAO(DB.getOracleConnection());
+    return userDAO.userExistsById(id);
   }
   
 }

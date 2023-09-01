@@ -13,8 +13,8 @@ public class CustomerTest {
     CustomerDAO customerDAO = new CustomerDAO(DB.getOracleConnection());
 
     // * Inserindo Customer
-    Customer customer = new Customer(84, "Pedro", "pedro@gmail.com", "119355156");
-    //customerDAO.insert(customer);
+    Customer customer = new Customer(900, "Pedro", "pedro@gmail.com", "11111111311");
+    customerDAO.insert(customer);
 
     // * Atualizando Customer
     customer.setName("Dante");
@@ -26,7 +26,7 @@ public class CustomerTest {
     customers.forEach(c -> System.out.println(c.toString()));
 
     // ! Deletando Customer
-    customerDAO.delete(customer);
+    //customerDAO.delete(customer);
     
   }
 }

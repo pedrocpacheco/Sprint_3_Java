@@ -1,6 +1,8 @@
 package main.java.br.com.bikenow.model.entity.bicycle;
 
+import main.java.br.com.bikenow.model.dao.user.CustomerDAO;
 import main.java.br.com.bikenow.model.entity.user.Customer;
+import main.java.br.com.bikenow.model.infra.db.DB;
 
 public class Bicycle {
   
@@ -8,11 +10,13 @@ public class Bicycle {
 
   private String serialNumber;
 
+  private String model;
+
   private String brand;
 
   private Double price;
 
-  private Integer year;
+  private String year;
 
   private String description;
 
@@ -21,15 +25,16 @@ public class Bicycle {
   public Bicycle() {
   }
 
-  public Bicycle(Integer id, String serialNumber, String brand, Double price, Integer year, String description,
+  public Bicycle(Integer id, String serialNumber, String model, String brand, Double price, String year, String description,
       Customer owner) {
     this.id = id;
     this.serialNumber = serialNumber;
+    this.model = model;
     this.brand = brand;
     this.price = price;
     this.year = year;
     this.description = description;
-    this.owner = owner;
+    setOwner(owner);
   }
 
   public Integer getId() {
@@ -64,11 +69,11 @@ public class Bicycle {
     this.price = price;
   }
 
-  public Integer getYear() {
-    return year;
+  public String getYear(){
+    return this.year;
   }
 
-  public void setYear(Integer year) {
+  public void setYear(String year) {
     this.year = year;
   }
 
@@ -84,8 +89,28 @@ public class Bicycle {
     return owner;
   }
 
-  public void setOwner(Customer owner) {
-    this.owner = owner;
+  public String getOwnerCpf(){
+    return owner.getCpf();
   }
+
+  public void setOwner(Customer customer) {
+    this.owner = customer;
+  }
+
+  public String getModel() {
+    return model;
+  }
+
+  public void setModel(String model) {
+    this.model = model;
+  }
+
+  @Override
+  public String toString() {
+    return "Bicycle [id=" + id + ", serialNumber=" + serialNumber + ", model=" + model + ", brand=" + brand + ", price="
+        + price + ", year=" + year + ", description=" + description + ", owner=" + owner + "]";
+  }
+
+  
 
 }
