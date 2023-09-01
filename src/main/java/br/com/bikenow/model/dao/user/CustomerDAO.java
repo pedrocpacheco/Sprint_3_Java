@@ -23,18 +23,6 @@ public class CustomerDAO {
 
   // * Metodo CREATE
   public void insert(Customer customer) {
-    if(customer == null){
-      throw new IllegalArgumentException("Customer parameter is null!");
-    }
-
-    if(customerExistsById(customer.getId())){
-      throw new IllegalArgumentException("Customer with id: " + customer.getId() + " already exist");
-    }
-
-    if(customerExistsByCpf(customer.getCpf())){
-      throw new IllegalArgumentException("Customer with cpf: " + customer.getCpf() + " already exist");
-    }
-
     String query = "INSERT INTO tb_customer VALUES (?, ?)";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
@@ -61,12 +49,7 @@ public class CustomerDAO {
       ResultSet rs = ps.executeQuery();
 
       while(rs.next()){
-        UserDAO userDAO = new UserDAO(DB.getOracleConnection());
-        User user = userDAO.findById(rs.getInt("id_user"));
-        String cpf = rs.getString("cpf_customer");
-       
-        Customer customer = new Customer(user.getId(), user.getName(), user.getEmail(), cpf);
-        customers.add(customer);
+       customers.add(createCustomerFromResultSet(rs));
       }
     } catch (SQLException e) {
       ExceptionHandler.handleSQLException(e, "Error fetching users");
@@ -76,10 +59,6 @@ public class CustomerDAO {
 
   // ? Metodo de FinByID
   public Customer findByCpf(String cpf) {
-    if (!customerExistsByCpf(cpf)) {
-      throw new IllegalArgumentException("Customer with id: " + cpf + " does not exist");
-    }
-
     String query = "SELECT * FROM tb_customer WHERE cpf_customer = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -87,11 +66,7 @@ public class CustomerDAO {
       
       try (ResultSet rs = ps.executeQuery()) {
         if (rs.next()) {
-          UserDAO userDAO = new UserDAO(DB.getOracleConnection());
-          User user = userDAO.findById(rs.getInt("id_user"));
-          String cpfGetted = rs.getString("cpf_customer");
-
-          return new Customer(user.getId(), user.getName(), user.getEmail(), cpfGetted);
+          createCustomerFromResultSet(rs);
         }
       }
     } catch (SQLException e) {
@@ -103,14 +78,6 @@ public class CustomerDAO {
 
   // * Metodo UPDATE
   public void update(Customer customer){
-    if(customer == null){
-      throw new IllegalArgumentException("Customer parameter is null!");
-    }
-
-    if(!customerExistsByCpf(customer.getCpf())){ 
-      throw new IllegalArgumentException("Customer with id: " + customer.getCpf() + " does not exists");
-    }
-
     String query = "UPDATE tb_user SET nm_user = ?, em_user = ? WHERE id_user = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
@@ -125,14 +92,6 @@ public class CustomerDAO {
 
   // ! Metodo DELETE
   public void delete(Customer customer){
-    if (customer == null) {
-      throw new IllegalArgumentException("Customer parameter is null!");
-    }
-
-    if(!customerExistsByCpf(customer.getCpf())){
-      throw new IllegalArgumentException("User with id: " + customer.getCpf() + " does not exist");
-    }
-
     String query = "DELETE FROM tb_customer WHERE id_user = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)) {
@@ -169,6 +128,15 @@ public class CustomerDAO {
   public boolean customerExistsById(Integer id){
     UserDAO userDAO = new UserDAO(DB.getOracleConnection());
     return userDAO.userExistsById(id);
+  }
+
+  // ? Create Customer From ResultSet
+  private Customer createCustomerFromResultSet(ResultSet rs) throws SQLException{
+    UserDAO userDAO = new UserDAO(DB.getOracleConnection());
+    User user = userDAO.findById(rs.getInt("id_user"));
+    String cpfGetted = rs.getString("cpf_customer");
+
+    return new Customer(user.getId(), user.getName(), user.getEmail(), cpfGetted);
   }
   
 }
