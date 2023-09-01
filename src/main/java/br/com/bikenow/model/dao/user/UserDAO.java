@@ -22,21 +22,10 @@ public class UserDAO {
 
   // * Metodo de Insert
   public void insert(User user) {
-    if (user == null) {
-      throw new IllegalArgumentException("User parameter is null!");
-    }
-
-    if (userExistsById(user.getId())) {
-      throw new IllegalArgumentException("User with id: " + user.getId() + " already exists!");
-    }
-
-    String query = "INSERT INTO tb_user VALUES (?, ?, ?, ?)";
+    String query = "INSERT INTO tb_user (nm_user, em_user, role_user, id_user) VALUES (?, ?, ?, ?)";
 
     try (PreparedStatement ps = conn.prepareStatement(query)) {
-      ps.setInt(1, user.getId());
-      ps.setString(2, user.getName());
-      ps.setString(3, user.getEmail());
-      ps.setString(4, user.getRole().toString());
+      setParameters(ps, user);
       ps.executeUpdate();
     } catch (SQLException e) {
       ExceptionHandler.handleSQLException(e, "Error inserting User");
@@ -52,15 +41,7 @@ public class UserDAO {
       ResultSet rs = ps.executeQuery()) {
 
       while (rs.next()) {
-        int id = rs.getInt("id_user");
-        String name = rs.getString("nm_user");
-        String email = rs.getString("em_user");
-        String role = rs.getString("role_user");
-        Role roleEnum = Role.valueOf(role); // Assuming Role enum values match the role column values
-
-        User user = new User(id, name, email, roleEnum);
-        userList.add(user);
-        System.out.println("Added " + name);
+        userList.add(createUserFromResultSet(rs));
       }
     } catch (SQLException e) {
       ExceptionHandler.handleSQLException(e, "Error fetching users");
@@ -71,10 +52,6 @@ public class UserDAO {
 
   // ? Metodo de FinByID
   public User findById(int id) {
-    if (!userExistsById(id)) {
-      throw new IllegalArgumentException("User with id: " + id + " does not exist");
-    }
-
     String query = "SELECT * FROM tb_user WHERE id_user = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -82,13 +59,7 @@ public class UserDAO {
       
       try (ResultSet rs = ps.executeQuery()) {
         if (rs.next()) {
-          int idUser = rs.getInt("id_user");
-          String name = rs.getString("nm_user");
-          String email = rs.getString("em_user");
-          String role = rs.getString("role_user");
-          Role roleEnum = Role.valueOf(role);
-
-          return new User(idUser, name, email, roleEnum);
+          createUserFromResultSet(rs);
         }
       }
     } catch (SQLException e) {
@@ -100,21 +71,10 @@ public class UserDAO {
 
   // * Metodo de Update
   public void update(User user) {
-    if (user == null) {
-      throw new IllegalArgumentException("User parameter is null!");
-    }
-
-    if (!userExistsById(user.getId())) {
-      throw new IllegalArgumentException("User with id: " + user.getId() + " does not exist");
-    }
-
     String query = "UPDATE tb_user SET nm_user = ?, em_user = ?, role_user = ? WHERE id_user = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(query)) {
-      ps.setString(1, user.getName());
-      ps.setString(2, user.getEmail());
-      ps.setString(3, user.getRole().toString());
-      ps.setInt(4, user.getId());
+      setParameters(ps, user);
       int rowsUpdated = ps.executeUpdate();
       if (rowsUpdated > 0) {
         System.out.println("User with id: " + user.getId() + " updated!");
@@ -128,14 +88,6 @@ public class UserDAO {
 
   // ! Metodo de Delete
   public void delete(User user) {
-    if (user == null) {
-      throw new IllegalArgumentException("User parameter is null!");
-    }
-
-    if (!userExistsById(user.getId())) {
-      throw new IllegalArgumentException("User with id: " + user.getId() + " does not exist");
-    }
-
     String query = "DELETE FROM tb_user WHERE id_user = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -147,7 +99,7 @@ public class UserDAO {
   }
 
   // ? Metodo Existe por ID
-  /* package */ boolean userExistsById(int userId) {
+  public boolean userExistsById(int userId) {
     String query = "SELECT id_user FROM tb_user WHERE id_user = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -159,5 +111,24 @@ public class UserDAO {
       ExceptionHandler.handleSQLException(e, "Error checking user existence by ID");
       return false;
     }
+  }
+
+  // ? 
+  private void setParameters(PreparedStatement ps, User user) throws SQLException {
+    ps.setString(1, user.getName());
+    ps.setString(2, user.getEmail());
+    ps.setString(3, user.getRole().toString());
+    ps.setInt(4, user.getId());
+}
+
+  // ? Creat User From RS
+  private User createUserFromResultSet(ResultSet rs) throws SQLException{
+    int idUser = rs.getInt("id_user");
+    String name = rs.getString("nm_user");
+    String email = rs.getString("em_user");
+    String role = rs.getString("role_user");
+    Role roleEnum = Role.valueOf(role);
+
+    return new User(idUser, name, email, roleEnum);
   }
 }
