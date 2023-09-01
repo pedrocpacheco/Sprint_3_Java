@@ -1,4 +1,4 @@
-package main.java.br.com.bikenow.model.db;
+package main.java.br.com.bikenow.model.infra.db;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,7 +9,7 @@ public abstract class DB {
 
   private static String url = "jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL";
 
-  public static Connection getConnection(){
+  public static Connection getOracleConnection(){
     OracleDataSource ods = null;
 
     try {

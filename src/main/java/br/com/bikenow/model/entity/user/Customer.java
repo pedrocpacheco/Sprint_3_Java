@@ -17,8 +17,7 @@ public class Customer extends User{
     return cpf;
   }
 
-  public void setCpf(String cpf) {
-    this.cpf = cpf;
-  }
+  // ? Não será permitido mudar o CPF de um Customer já criado
+  // ? Por isso não existe um setCPF()
 
 }

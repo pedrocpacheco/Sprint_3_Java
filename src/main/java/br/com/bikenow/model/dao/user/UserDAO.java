@@ -9,14 +9,14 @@ import java.util.List;
 
 import main.java.br.com.bikenow.model.entity.user.Role;
 import main.java.br.com.bikenow.model.entity.user.User;
-import main.java.br.com.bikenow.model.exceptions.ExceptionHandler;
+import main.java.br.com.bikenow.model.infra.exceptions.ExceptionHandler;
 
 public class UserDAO {
 
   // ? Conexão
-  private final Connection conn;
+  private Connection conn;
 
-  public UserDAO(Connection connection) {
+  public UserDAO(Connection connection){
     this.conn = connection;
   }
 
@@ -30,7 +30,7 @@ public class UserDAO {
       throw new IllegalArgumentException("User with id: " + user.getId() + " already exists!");
     }
 
-    String query = "INSERT INTO tb_user (id_user, nm_user, em_user, role_user) VALUES (?, ?, ?, ?)";
+    String query = "INSERT INTO tb_user VALUES (?, ?, ?, ?)";
 
     try (PreparedStatement ps = conn.prepareStatement(query)) {
       ps.setInt(1, user.getId());
@@ -147,7 +147,7 @@ public class UserDAO {
   }
 
   // ? Metodo Existe por ID
-  private boolean userExistsById(int userId) {
+  /* package */ boolean userExistsById(int userId) {
     String query = "SELECT id_user FROM tb_user WHERE id_user = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(query)) {

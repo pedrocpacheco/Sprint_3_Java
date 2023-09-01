@@ -1,4 +1,4 @@
-package main.java.br.com.bikenow.model.db;
+package main.java.br.com.bikenow.model.infra.db;
 
 public abstract class Credentials {
   

@@ -9,7 +9,8 @@ import java.util.List;
 
 import main.java.br.com.bikenow.model.entity.user.Customer;
 import main.java.br.com.bikenow.model.entity.user.User;
-import main.java.br.com.bikenow.model.exceptions.ExceptionHandler;
+import main.java.br.com.bikenow.model.infra.db.DB;
+import main.java.br.com.bikenow.model.infra.exceptions.ExceptionHandler;
 
 public class CustomerDAO {
   
@@ -33,8 +34,13 @@ public class CustomerDAO {
     String query = "INSERT INTO tb_customer VALUES (?, ?)";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
-      UserDAO userDAO = new UserDAO(conn);
-      userDAO.insert(new User(customer.getId(), customer.getName(), customer.getEmail(), customer.getRole()));
+      UserDAO userDAO = new UserDAO(DB.getOracleConnection());
+
+      if(!userDAO.userExistsById(customer.getId())){
+        userDAO.insert(new User(customer.getId(), customer.getName(), 
+                               customer.getEmail(), customer.getRole()));
+        System.out.println("entrei aqui");
+      }
 
       ps.setString(1, customer.getCpf());
       ps.setInt(2, customer.getId());
@@ -54,7 +60,7 @@ public class CustomerDAO {
       ResultSet rs = ps.executeQuery();
 
       while(rs.next()){
-        UserDAO userDAO = new UserDAO(conn);
+        UserDAO userDAO = new UserDAO(DB.getOracleConnection());
         User user = userDAO.findById(rs.getInt("id_user"));
         String cpf = rs.getString("cpf_customer");
        
@@ -84,6 +90,7 @@ public class CustomerDAO {
       ps.setString(1, customer.getName());
       ps.setString(2, customer.getEmail());
       ps.setInt(3, customer.getId());
+      ps.executeUpdate();
     } catch(SQLException e){
       ExceptionHandler.handleSQLException(e, "Error updating Customer");
     }
@@ -96,7 +103,7 @@ public class CustomerDAO {
     }
 
     if(!customerExistsById(customer.getId())){
-      throw new IllegalArgumentException("User with id: " + customer.getId() + " does not exist");
+      throw new IllegalArgumentException("User with id: " + customer.getCpf() + " does not exist");
     }
 
     String query = "DELETE FROM tb_customer WHERE id_user = ?";
@@ -107,17 +114,24 @@ public class CustomerDAO {
     } catch(SQLException e){
       ExceptionHandler.handleSQLException(e, "Error Deleting Customer");
     }
+
+    String queryUser = "DELETE FROM tb_user WHERE id_user = ?";
+    try(PreparedStatement ps = conn.prepareStatement(queryUser)) {
+      ps.setInt(1, customer.getId());
+      ps.executeUpdate();
+    } catch(SQLException e){
+      ExceptionHandler.handleSQLException(e, "Error Deleting Customer");
+    }
   }
 
   // ? Metodo Existe por ID
-  private boolean customerExistsById(int customerId){
-      String query = "SELECT id_user FROM tb_user WHERE id_user = ?";
+  private boolean customerExistsById(int id){
+      String query = "SELECT id_user FROM tb_customer WHERE id_user = ?";
 
       try(PreparedStatement ps = conn.prepareStatement(query)){
-        ps.setInt(1, customerId);
-        try(ResultSet rs = ps.executeQuery()){
-          return rs.next();
-        }
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        return rs.next();
       } catch(SQLException e){
         ExceptionHandler.handleSQLException(e, "Error checking customer existence by ID");
         return false;

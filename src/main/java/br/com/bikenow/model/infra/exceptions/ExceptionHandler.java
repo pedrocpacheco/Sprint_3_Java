@@ -1,4 +1,4 @@
-package main.java.br.com.bikenow.model.exceptions;
+package main.java.br.com.bikenow.model.infra.exceptions;
 
 import java.sql.SQLException;
 
