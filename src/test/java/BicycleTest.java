@@ -11,7 +11,7 @@ import main.java.br.com.bikenow.model.service.bicycle.BicycleService;
 public class BicycleTest {
   public static void main(String[] args) {
     
-    // ? Criando Bicycle Service
+    // Criando Bicycle Service
     BicycleService bicycleService = new BicycleService(DB.getOracleConnection());
 
     // * CREATE - Criando e Salvando Biciclceta
@@ -33,12 +33,9 @@ public class BicycleTest {
     bicyclesByCpf.forEach(bc -> System.out.println(bc.toString()));
 
     // * UPDATE - Atualizando Bicicleta
-    bicycle.setSerialNumber("1");
     bicycle.setModel("N");
     bicycle.setBrand("L");
-    bicycle.setPrice(40.20);
     bicycle.setYear("2019");
-    bicycle.setDescription("R");
     bicycleService.update(bicycle);
 
     // ! DELETE - Deletando Bicicleta

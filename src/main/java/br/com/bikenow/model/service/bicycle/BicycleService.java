@@ -18,6 +18,7 @@ public class BicycleService {
     this.bicycleDAO = new BicycleDAO(connection);
   }
 
+  // * CREATE
   public void createBicycle(Bicycle bicycle){
 
     if(bicycle == null){
@@ -37,10 +38,12 @@ public class BicycleService {
 
   }
 
+  // ? READ - All
   public List<Bicycle> findAll(){
     return bicycleDAO.list();
   }
 
+  // ? READ - By ID
   public Bicycle findById(Integer id){
     if(!bicycleDAO.bicycleExistsById(id)){
       throw new IllegalArgumentException("Bicycle with id: " + id + " does not exist");
@@ -48,6 +51,7 @@ public class BicycleService {
     return bicycleDAO.findById(id);
   }
 
+  // ? READ - By Customer CPF
   public List<Bicycle> findByCustomer(String cpf){
 
     customerDAO = new CustomerDAO(DB.getOracleConnection());
@@ -59,6 +63,7 @@ public class BicycleService {
 
   }
 
+  // * UPDATE
   public void update(Bicycle bicycle){
     if(bicycle == null){
       throw new IllegalArgumentException("Bicycle parameter is null!");
@@ -71,6 +76,7 @@ public class BicycleService {
     bicycleDAO.update(bicycle);
   }
 
+  // ! DELETE
   public void delete(Bicycle bicycle){
     if(bicycle == null){
       throw new IllegalArgumentException("Bicycle parameter is null!");
