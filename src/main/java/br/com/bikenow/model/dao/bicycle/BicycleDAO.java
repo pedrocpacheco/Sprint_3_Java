@@ -22,6 +22,22 @@ public class BicycleDAO {
     this.conn = connection;
   }
 
+  // Metodo Existe por ID
+  public boolean bicycleExistsById(int id){
+
+      String query = "SELECT id_bicycle FROM tb_bicycle WHERE id_bicycle = ?";
+
+      try(PreparedStatement ps = conn.prepareStatement(query)){
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        return rs.next();
+      } catch(SQLException e){
+        ExceptionHandler.handleSQLException(e, "Error checking bicycle existence by ID");
+        return false;
+      }
+
+  }
+
   // * Metodo CREATE
   public void insert(Bicycle bicycle){
     String query = "INSERT INTO tb_bicycle (num_serie_bicycle, nm_bicycle, brand_bicycle, price_bicycle, year_bicycle, ds_bicycle, id_bicycle, cpf_customer) " + 
@@ -118,23 +134,7 @@ public class BicycleDAO {
     }
 }
 
-  // ? Metodo Existe por ID
-  public boolean bicycleExistsById(int id){
-
-      String query = "SELECT id_bicycle FROM tb_bicycle WHERE id_bicycle = ?";
-
-      try(PreparedStatement ps = conn.prepareStatement(query)){
-        ps.setInt(1, id);
-        ResultSet rs = ps.executeQuery();
-        return rs.next();
-      } catch(SQLException e){
-        ExceptionHandler.handleSQLException(e, "Error checking bicycle existence by ID");
-        return false;
-      }
-
-  }
-
-  // ? Setanado Parametros
+  // Create PS From Bicycle 
   private void setParameters(PreparedStatement ps, Bicycle bicycle) throws SQLException{
       ps.setString(1, bicycle.getSerialNumber());
       ps.setString(2, bicycle.getModel());
@@ -145,7 +145,7 @@ public class BicycleDAO {
       ps.setInt(7, bicycle.getId());
   }
 
-  // ? Create Bicycle From RS
+  // Create Bicycle From RS
   private Bicycle bicycleFromResultSet(ResultSet rs) throws SQLException{
     Integer id = rs.getInt("id_bicycle");
     String serialNumber = rs.getString("num_serie_bicycle");

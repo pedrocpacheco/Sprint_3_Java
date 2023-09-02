@@ -20,6 +20,20 @@ public class AddonDAO {
     this.conn = connection;
   }
 
+  // Metodo Existe por ID
+  public boolean addonExistsById(int id){
+      String query = "SELECT id_addon FROM tb_addon WHERE id_addon = ?";
+
+      try(PreparedStatement ps = conn.prepareStatement(query)){
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        return rs.next();
+      } catch(SQLException e){
+        ExceptionHandler.handleSQLException(e, "Error checking Addon existence by ID");
+        return false;
+      }
+  }
+
   // * Metodo CREATE
   public void insert(Addon addon){
     String query = "INSERT INTO tb_addon (nm_addon, brand_addon, price_addon, ds_addon, id_addon, id_bicycle) VALUES(?, ?, ?, ?, ?, ?)";
@@ -109,22 +123,7 @@ public class AddonDAO {
     }
   }
 
-
-  // ? Metodo Existe por ID
-  public boolean addonExistsById(int id){
-      String query = "SELECT id_addon FROM tb_addon WHERE id_addon = ?";
-
-      try(PreparedStatement ps = conn.prepareStatement(query)){
-        ps.setInt(1, id);
-        ResultSet rs = ps.executeQuery();
-        return rs.next();
-      } catch(SQLException e){
-        ExceptionHandler.handleSQLException(e, "Error checking Addon existence by ID");
-        return false;
-      }
-  }
-
-  // ? Setanado Parametros
+  // Create PS From Addon
   private void setParameters(PreparedStatement ps, Addon addon) throws SQLException{
       ps.setString(1, addon.getName());
       ps.setString(2, addon.getBrand());
@@ -133,7 +132,7 @@ public class AddonDAO {
       ps.setInt(5, addon.getId());
   }
 
-  // ? Create Addon From RS
+  // Create Addon From RS
   private Addon addonFromResultSet(ResultSet rs) throws SQLException{
     int id = rs.getInt("id_addon");
     String name = rs.getString("nm_addon");
