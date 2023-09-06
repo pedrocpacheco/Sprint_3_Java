@@ -24,7 +24,6 @@ public class BicycleDAO {
 
   // Metodo Existe por ID
   public boolean bicycleExistsById(int id){
-
       String query = "SELECT id_bicycle FROM tb_bicycle WHERE id_bicycle = ?";
 
       try(PreparedStatement ps = conn.prepareStatement(query)){

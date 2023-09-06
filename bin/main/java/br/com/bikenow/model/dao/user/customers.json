@@ -1,0 +1,48 @@
+[
+  {
+    "id": 1,
+    "cpf": "51670111162",
+    "name": "Pedro Pacheco",
+    "email": "pedrocpacheco@gmail.com",
+    "role": "CUSTOMER",
+    "bicycles": [{
+      "id": 1,
+      "model": "Strativarius",
+      "brand": "Lukeshaw",
+      "price": 2950.50,
+      "year": 2020,
+      "description": "All you need to explore the while wild world"
+    },
+    {
+      "id": 2,
+      "model": "Rick",
+      "brand": "Grimes",
+      "price": 5404.50,
+      "year": 2023,
+      "description": "You want your bicycle to also be you friend? You found what you want"
+    }]
+  },
+  {
+    "id": 2,
+    "cpf": "50910142203",
+    "name": "Lauren Cohen",
+    "email": "laurencohen@outlook.com",
+    "role": "CUSTOMER",
+    "bicycles": [{
+      "id": 3,
+      "model": "Wentworth",
+      "brand": "Miller",
+      "price": 4323.12,
+      "year": 2005,
+      "description": "It's not just an bicycle, it's something that changes generations"
+    },
+    {
+      "id": 4,
+      "model": "Rick",
+      "brand": "Grimes",
+      "price": 5404.50,
+      "year": 2024,
+      "description": "Carl, my son, let me show the new world for you, please."
+    }]
+  }
+]

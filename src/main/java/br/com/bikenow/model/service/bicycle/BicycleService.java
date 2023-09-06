@@ -20,7 +20,6 @@ public class BicycleService {
 
   // * CREATE
   public void createBicycle(Bicycle bicycle){
-
     if(bicycle == null){
       throw new RuntimeException("Bicycle parameter is null!");
     }
@@ -35,7 +34,6 @@ public class BicycleService {
     }
 
     bicycleDAO.insert(bicycle);
-
   }
 
   // ? READ - All
@@ -60,7 +58,6 @@ public class BicycleService {
     }
 
     return bicycleDAO.findByCustomer(cpf);
-
   }
 
   // * UPDATE
@@ -87,7 +84,6 @@ public class BicycleService {
     }
 
     bicycleDAO.delete(bicycle);
-
   }
 
 }
