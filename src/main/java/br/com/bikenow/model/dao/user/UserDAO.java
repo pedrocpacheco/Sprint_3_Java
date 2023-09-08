@@ -21,7 +21,7 @@ public class UserDAO {
   }
 
   // * Metodo de Insert
-  public void insert(User user) {
+  public void createUser(User user) {
     String query = "INSERT INTO tb_user (nm_user, em_user, id_user, role_user) VALUES (?, ?, ?, ?)";
 
     try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -34,7 +34,7 @@ public class UserDAO {
   }
 
   // ? Metodo de List
-  public List<User> list() {
+  public List<User> findAll() {
     List<User> userList = new ArrayList<>();
     String query = "SELECT * FROM tb_user";
 
@@ -71,7 +71,7 @@ public class UserDAO {
   }
 
   // * Metodo de Update
-  public void update(User user) {
+  public void updateUser(User user) {
     String query = "UPDATE tb_user SET nm_user = ?, em_user = ? WHERE id_user = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -88,7 +88,7 @@ public class UserDAO {
   }
 
   // ! Metodo de Delete
-  public void delete(User user) {
+  public void deleteUser(User user) {
     String query = "DELETE FROM tb_user WHERE id_user = ?";
 
     try (PreparedStatement ps = conn.prepareStatement(query)) {

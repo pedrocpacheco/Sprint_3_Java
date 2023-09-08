@@ -38,7 +38,7 @@ public class BicycleDAO {
   }
 
   // * Metodo CREATE
-  public void insert(Bicycle bicycle){
+  public void createBicycle(Bicycle bicycle){
     String query = "INSERT INTO tb_bicycle (num_serie_bicycle, nm_bicycle, brand_bicycle, price_bicycle, year_bicycle, ds_bicycle, id_bicycle, cpf_customer) " + 
                   "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
  
@@ -52,7 +52,7 @@ public class BicycleDAO {
   }
 
   // ? Metodo List
-  public List<Bicycle> list(){
+  public List<Bicycle> findAll(){
     List<Bicycle> bicycles = new ArrayList<>();
     String query = "SELECT * FROM tb_bicycle";
 
@@ -60,7 +60,7 @@ public class BicycleDAO {
       ResultSet rs = ps.executeQuery();
 
       while(rs.next()){
-         bicycles.add(bicycleFromResultSet(rs));
+        bicycles.add(bicycleFromResultSet(rs));
       }
     
     } catch(SQLException e){
@@ -108,7 +108,7 @@ public class BicycleDAO {
   }
 
   // * Metodo UPDATE
-  public void update(Bicycle bicycle){
+  public void updateBicycle(Bicycle bicycle){
     String query = "UPDATE tb_bicycle SET num_serie_bicycle = ?, nm_bicycle = ?, " +
         "brand_bicycle = ?, price_bicycle = ?, year_bicycle = ?, ds_bicycle = ? WHERE id_bicycle = ?";
 
@@ -121,7 +121,7 @@ public class BicycleDAO {
   }
 
   // ! Metodo DELETE
-  public void delete(Bicycle bicycle){
+  public void deleteBicycle(Bicycle bicycle){
     
     String query = "DELETE FROM tb_bicycle WHERE id_bicycle = ?";
 

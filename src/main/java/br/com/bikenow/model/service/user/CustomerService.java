@@ -27,11 +27,11 @@ public class CustomerService {
       throw new IllegalArgumentException("Customer with cpf: " + customer.getCpf() + " already exist");
     }
 
-    customerDAO.insert(customer);
+    customerDAO.createCustomer(customer);
   }
 
   public List<Customer> findAll(){
-    return customerDAO.list();
+    return customerDAO.findAll();
   }
 
   public Customer findByCpf(String cpf){
@@ -51,7 +51,7 @@ public class CustomerService {
       throw new IllegalArgumentException("Customer with id: " + customer.getCpf() + " does not exists");
     }
 
-    customerDAO.update(customer);
+    customerDAO.updateCustomer(customer);
   }
 
   public void deleteCustomer(Customer customer){
@@ -63,7 +63,7 @@ public class CustomerService {
       throw new IllegalArgumentException("User with id: " + customer.getCpf() + " does not exist");
     }
 
-    customerDAO.delete(customer);
+    customerDAO.deleteCustomer(customer);
   }
 
 }

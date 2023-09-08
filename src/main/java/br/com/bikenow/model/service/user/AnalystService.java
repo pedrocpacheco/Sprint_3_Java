@@ -28,11 +28,11 @@ public class AnalystService {
       throw new IllegalArgumentException("Analyst with rm: " + analyst.getId() + " already exists");
     }
 
-    analystDAO.insert(analyst);
+    analystDAO.createAnalyst(analyst);
   }
 
   public List<Analyst> findAll(){
-    return analystDAO.list();
+    return analystDAO.findAll();
   }
 
   public void updateAnalyst(Analyst analyst){
@@ -44,7 +44,7 @@ public class AnalystService {
       throw new IllegalArgumentException("analyst with id: " + analyst.getId() + " does not exists");
     }
 
-    analystDAO.update(analyst);
+    analystDAO.updateAnalyst(analyst);
   }
 
   public Analyst findByRm(String rm){
@@ -64,7 +64,7 @@ public class AnalystService {
       throw new IllegalArgumentException("User with id: " + analyst.getRm() + " does not exist");
     }
 
-    analystDAO.delete(analyst);
+    analystDAO.deleteAnalyst(analyst);
   }
 
 }

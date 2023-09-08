@@ -33,12 +33,12 @@ public class BicycleService {
       throw new IllegalArgumentException("Bicycle with id: " + bicycle.getId() + " already exists");
     }
 
-    bicycleDAO.insert(bicycle);
+    bicycleDAO.createBicycle(bicycle);
   }
 
   // ? READ - All
   public List<Bicycle> findAll(){
-    return bicycleDAO.list();
+    return bicycleDAO.findAll();
   }
 
   // ? READ - By ID
@@ -70,7 +70,7 @@ public class BicycleService {
       throw new IllegalArgumentException("Bicycle does not exist!");
     }
 
-    bicycleDAO.update(bicycle);
+    bicycleDAO.updateBicycle(bicycle);
   }
 
   // ! DELETE
@@ -83,7 +83,7 @@ public class BicycleService {
       throw new IllegalArgumentException("Bicycle does not exist");
     }
 
-    bicycleDAO.delete(bicycle);
+    bicycleDAO.deleteBicycle(bicycle);
   }
 
 }

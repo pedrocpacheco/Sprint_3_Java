@@ -35,7 +35,7 @@ public class AddonDAO {
   }
 
   // * Metodo CREATE
-  public void insert(Addon addon){
+  public void createAddon(Addon addon){
     String query = "INSERT INTO tb_addon (nm_addon, brand_addon, price_addon, ds_addon, id_addon, id_bicycle) VALUES(?, ?, ?, ?, ?, ?)";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
@@ -48,7 +48,7 @@ public class AddonDAO {
   }
 
   // ? Metodo Find All
-  public List<Addon> list(){
+  public List<Addon> findAll(){
     List<Addon> addons = new ArrayList<>();
     String query = "SELECT * FROM tb_addon";
 
@@ -100,7 +100,7 @@ public class AddonDAO {
   }
 
   // * Metodo UPDATE 
-  public void update(Addon addon){
+  public void updateAddon(Addon addon){
     String query = "UPDATE tb_addon SET nm_addon = ?, brand_addon = ?, price_addon = ?, ds_addon = ? WHERE id_addon = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
@@ -112,7 +112,7 @@ public class AddonDAO {
   }
 
   // ! Metodo Delete
-  public void delete(Addon addon){
+  public void deleteAddon(Addon addon){
     String query = "DELETE FROM tb_addon WHERE id_addon = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){

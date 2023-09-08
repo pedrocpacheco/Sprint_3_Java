@@ -22,14 +22,14 @@ public class AnalystDAO {
   }
 
   // * Metodo CREATE
-  public void insert(Analyst analyst) {
+  public void createAnalyst(Analyst analyst) {
     String query = "INSERT INTO tb_analyst VALUES (?, ?)";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
       UserDAO userDAO = new UserDAO(DB.getOracleConnection());
 
       if(!userDAO.userExistsById(analyst.getId())){
-        userDAO.insert(new User(analyst.getId(), analyst.getName(), 
+        userDAO.createUser(new User(analyst.getId(), analyst.getName(), 
                                analyst.getEmail(), analyst.getRole()));
         System.out.println("entrei aqui");
       }
@@ -44,7 +44,7 @@ public class AnalystDAO {
   }
 
   // ? Metodos READ
-  public List<Analyst> list(){
+  public List<Analyst> findAll(){
     List<Analyst> analysts = new ArrayList<>();
     String query = "SELECT * FROM tb_analyst";
 
@@ -80,7 +80,7 @@ public class AnalystDAO {
   }
 
   // * Metodo UPDATE
-  public void update(Analyst analyst){
+  public void updateAnalyst(Analyst analyst){
     String queryUser = "UPDATE tb_user SET nm_user = ?, em_user = ? WHERE id_user = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(queryUser)){
@@ -93,7 +93,7 @@ public class AnalystDAO {
   }
 
   // ! Metodo DELETE
-  public void delete(Analyst analyst){
+  public void deleteAnalyst(Analyst analyst){
     String query = "DELETE FROM tb_analyst WHERE id_user = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)) {

@@ -22,13 +22,13 @@ public class CustomerDAO {
   }
 
   // * Metodo CREATE
-  public void insert(Customer customer) {
+  public void createCustomer(Customer customer) {
     String query = "INSERT INTO tb_customer VALUES (?, ?)";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
       UserDAO userDAO = new UserDAO(DB.getOracleConnection());
       if(!userDAO.userExistsById(customer.getId())){
-        userDAO.insert(new User(customer.getId(), customer.getName(), 
+        userDAO.createUser(new User(customer.getId(), customer.getName(), 
                                customer.getEmail(), customer.getRole()));
       }
 
@@ -41,7 +41,7 @@ public class CustomerDAO {
   }
 
   // ? Metodos READ
-  public List<Customer> list(){
+  public List<Customer> findAll(){
     List<Customer> customers = new ArrayList<>();
     String query = "SELECT * FROM tb_customer";
 
@@ -78,7 +78,7 @@ public class CustomerDAO {
   }
 
   // * Metodo UPDATE
-  public void update(Customer customer){
+  public void updateCustomer(Customer customer){
     String query = "UPDATE tb_user SET nm_user = ?, em_user = ? WHERE id_user = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)){
@@ -91,7 +91,7 @@ public class CustomerDAO {
   }
 
   // ! Metodo DELETE
-  public void delete(Customer customer){
+  public void deleteCustomer(Customer customer){
     String query = "DELETE FROM tb_customer WHERE id_user = ?";
 
     try(PreparedStatement ps = conn.prepareStatement(query)) {

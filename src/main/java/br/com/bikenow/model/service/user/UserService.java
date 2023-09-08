@@ -25,12 +25,12 @@ public class UserService {
       throw new IllegalArgumentException("User with id: " + user.getId() + " already exists!");
     }
 
-    userDAO.insert(user);
+    userDAO.createUser(user);
   }
 
   // ? Metodo READ All
   public List<User> findAll(){
-    return userDAO.list();
+    return userDAO.findAll();
   }
 
   // ? Metodo READ by ID
@@ -52,7 +52,7 @@ public class UserService {
       throw new IllegalArgumentException("User with id: " + user.getId() + " does not exist");
     }
 
-    userDAO.update(user);
+    userDAO.updateUser(user);
   }
 
   // ! Metodo DELETE
@@ -65,7 +65,7 @@ public class UserService {
       throw new IllegalArgumentException("User with id: " + user.getId() + " does not exist");
     }
 
-    userDAO.delete(user);
+    userDAO.deleteUser(user);
   }
 
 }

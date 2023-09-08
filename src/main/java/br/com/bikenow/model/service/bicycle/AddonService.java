@@ -32,11 +32,11 @@ public class AddonService {
       throw new IllegalArgumentException("Addon with id: " + addon.getOwner().getId() + " does not exist");
     } 
 
-    addonDAO.insert(addon);
+    addonDAO.createAddon(addon);
   }
 
   public List<Addon> findAll(){
-    return addonDAO.list();
+    return addonDAO.findAll();
   }
 
   public Addon findById(Integer id){
@@ -60,7 +60,7 @@ public class AddonService {
       throw new IllegalArgumentException("Addon does not exist!");
     }
 
-    addonDAO.update(addon);
+    addonDAO.updateAddon(addon);
   }
 
   public void deleteAddon(Addon addon){
@@ -72,7 +72,7 @@ public class AddonService {
       throw new IllegalArgumentException("Addon does not exist");
     }
 
-    addonDAO.delete(addon);
+    addonDAO.deleteAddon(addon);
   }
 
 }
