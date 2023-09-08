@@ -9,8 +9,8 @@ import java.util.List;
 
 import main.java.br.com.bikenow.model.entity.user.Analyst;
 import main.java.br.com.bikenow.model.entity.user.User;
-import main.java.br.com.bikenow.model.infra.db.DB;
-import main.java.br.com.bikenow.model.infra.exceptions.ExceptionHandler;
+import main.resources.infra.db.DB;
+import main.resources.infra.exceptions.ExceptionHandler;
 
 public class AnalystDAO {
   

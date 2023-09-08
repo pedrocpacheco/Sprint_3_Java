@@ -4,8 +4,8 @@ import java.util.List;
 
 import main.java.br.com.bikenow.model.entity.user.Role;
 import main.java.br.com.bikenow.model.entity.user.User;
-import main.java.br.com.bikenow.model.infra.db.DB;
 import main.java.br.com.bikenow.model.service.user.UserService;
+import main.resources.infra.db.DB;
 
 public class UserTest {
   public static void main(String[] args) {

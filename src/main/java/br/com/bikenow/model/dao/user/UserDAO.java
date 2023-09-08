@@ -9,7 +9,7 @@ import java.util.List;
 
 import main.java.br.com.bikenow.model.entity.user.Role;
 import main.java.br.com.bikenow.model.entity.user.User;
-import main.java.br.com.bikenow.model.infra.exceptions.ExceptionHandler;
+import main.resources.infra.exceptions.ExceptionHandler;
 
 public class UserDAO {
 

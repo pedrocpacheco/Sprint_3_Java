@@ -1,4 +1,4 @@
-package main.java.br.com.bikenow.model.infra.db;
+package main.resources.infra.db;
 
 import java.sql.Connection;
 import java.sql.SQLException;

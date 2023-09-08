@@ -10,8 +10,8 @@ import java.util.List;
 import main.java.br.com.bikenow.model.dao.user.CustomerDAO;
 import main.java.br.com.bikenow.model.entity.bicycle.Bicycle;
 import main.java.br.com.bikenow.model.entity.user.Customer;
-import main.java.br.com.bikenow.model.infra.db.DB;
-import main.java.br.com.bikenow.model.infra.exceptions.ExceptionHandler;
+import main.resources.infra.db.DB;
+import main.resources.infra.exceptions.ExceptionHandler;
 
 public class BicycleDAO {
   

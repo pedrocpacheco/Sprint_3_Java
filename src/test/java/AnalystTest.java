@@ -3,8 +3,8 @@ package test.java;
 import java.util.List;
 
 import main.java.br.com.bikenow.model.entity.user.Analyst;
-import main.java.br.com.bikenow.model.infra.db.DB;
 import main.java.br.com.bikenow.model.service.user.AnalystService;
+import main.resources.infra.db.DB;
 
 public class AnalystTest {
   public static void main(String[] args) {

@@ -6,7 +6,7 @@ import java.util.List;
 import main.java.br.com.bikenow.model.dao.bicycle.AddonDAO;
 import main.java.br.com.bikenow.model.dao.bicycle.BicycleDAO;
 import main.java.br.com.bikenow.model.entity.bicycle.Addon;
-import main.java.br.com.bikenow.model.infra.db.DB;
+import main.resources.infra.db.DB;
 
 public class AddonService {
   

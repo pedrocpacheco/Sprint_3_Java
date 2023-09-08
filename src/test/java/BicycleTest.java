@@ -5,8 +5,8 @@ import java.util.List;
 import main.java.br.com.bikenow.model.dao.user.CustomerDAO;
 import main.java.br.com.bikenow.model.entity.bicycle.Bicycle;
 import main.java.br.com.bikenow.model.entity.user.Customer;
-import main.java.br.com.bikenow.model.infra.db.DB;
 import main.java.br.com.bikenow.model.service.bicycle.BicycleService;
+import main.resources.infra.db.DB;
 
 public class BicycleTest {
   public static void main(String[] args) {
