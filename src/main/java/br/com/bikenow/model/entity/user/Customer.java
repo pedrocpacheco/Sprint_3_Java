@@ -10,7 +10,7 @@ public class Customer extends User{
 
   public Customer(Integer id, String name, String email, String cpf) {
     super(id, name, email, Role.CUSTOMER);
-    setCPF(cpf);;
+    setCPF(cpf);
   }
 
   public String getCpf() {

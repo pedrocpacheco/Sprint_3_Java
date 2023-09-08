@@ -25,7 +25,7 @@ public class Bicycle {
 
   public Bicycle(Integer id, String serialNumber, String model, String brand, Double price, String year, String description,
       Customer owner) {
-    this.id = id;
+    setId(id);
     this.serialNumber = serialNumber;
     this.model = model;
     this.brand = brand;
@@ -37,6 +37,13 @@ public class Bicycle {
 
   public Integer getId() {
     return id.intValue();
+  }
+  
+  public void setId(Integer id){
+    if(id > 9999 || id < 0){
+      throw new IllegalArgumentException("Id must be a value between 0 and 9999");
+    }
+    this.id = id;
   }
 
   public String getSerialNumber() {

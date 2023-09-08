@@ -15,7 +15,7 @@ public class User {
     }
 
     public User(Integer id, String name, String email, Role role) {
-      this.id = id;
+      setId(id);
       this.name = name;
       this.email = email;
       this.role = role;
@@ -23,6 +23,13 @@ public class User {
 
     public Integer getId() {
       return id;
+    }
+
+    public void setId(Integer id) {
+      if(id > 9999 || id < 0){
+        throw new IllegalArgumentException("Id must be a value between 0 and 9999");
+      }
+      this.id = id;
     }
 
     public String getName() {

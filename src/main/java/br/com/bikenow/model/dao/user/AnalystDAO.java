@@ -61,6 +61,24 @@ public class AnalystDAO {
     return analysts;
   }
 
+  public Analyst findById(Integer id) {
+    String query = "SELECT * FROM tb_analyst WHERE id_user = ?";
+
+    try (PreparedStatement ps = conn.prepareStatement(query)) {
+      ps.setInt(1, id);
+      
+      try (ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) {
+          return createAnalystFromResultSet(rs);
+        }
+      }
+    } catch (SQLException e) {
+      ExceptionHandler.handleSQLException(e, "Error Finding Analyst ID");
+    }
+
+    return null;
+  }
+
   public Analyst findByRm(String rm) {
     String query = "SELECT * FROM tb_analyst WHERE rm_analyst = ?";
 

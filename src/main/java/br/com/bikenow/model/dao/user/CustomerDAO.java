@@ -58,7 +58,26 @@ public class CustomerDAO {
     return customers;
   }
 
-  // ? Metodo de FinByID
+  // ? Metodo de FinById
+  public Customer findById(Integer id) {
+    String query = "SELECT * FROM tb_customer WHERE id_user = ?";
+
+    try (PreparedStatement ps = conn.prepareStatement(query)) {
+      ps.setInt(1, id);
+      
+      try (ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) {
+          return createCustomerFromResultSet(rs);
+        }
+      }
+    } catch (SQLException e) {
+      ExceptionHandler.handleSQLException(e, "Error Finding Customer ID");
+    }
+
+    return null;
+  }
+
+  // ? Metodo de FinByCpf
   public Customer findByCpf(String cpf) {
     String query = "SELECT * FROM tb_customer WHERE cpf_customer = ?";
 

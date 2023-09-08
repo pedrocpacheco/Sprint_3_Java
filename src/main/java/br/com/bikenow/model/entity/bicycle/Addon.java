@@ -18,7 +18,7 @@ public class Addon {
   }
 
   public Addon(Integer id, String name, String brand, Double price, String description, Bicycle owner) {
-    this.id = id;
+    setId(id);
     this.name = name;
     this.brand = brand;
     this.price = price;
@@ -31,6 +31,9 @@ public class Addon {
   }
 
   public void setId(Integer id) {
+    if(id > 9999 || id < 0){
+      throw new IllegalArgumentException("Id must be a value between 0 and 9999");
+    }
     this.id = id;
   }
 

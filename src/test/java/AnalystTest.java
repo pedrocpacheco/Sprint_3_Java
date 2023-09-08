@@ -13,7 +13,7 @@ public class AnalystTest {
     AnalystService analystService = new AnalystService(DB.getOracleConnection());
 
     // * CREATE - Inserindo Analyst
-    Analyst analyst = new Analyst(1000, "Analista99", "analista99@gmail.com", "111132111111");
+    Analyst analyst = new Analyst(14, "Analista99", "analista99@gmail.com", "251132111111");
     analystService.createAnalyst(analyst);
 
     // ? READ - Listando Analysts
@@ -21,7 +21,11 @@ public class AnalystTest {
     analysts.forEach(a -> System.out.println(a.toString()));
 
     // ? READ - Listando Analyst por Rm
-    Analyst analystByRm = analystService.findByRm("111132111111");
+    Analyst analystById = analystService.findById(analyst.getId());
+    System.out.println(analystById.toString());
+
+    // ? READ - Listando Analyst por Rm
+    Analyst analystByRm = analystService.findByRm(analyst.getRm());
     System.out.println(analystByRm.toString());
 
     // * UPDATE-  Atualizando Analyst

@@ -34,9 +34,18 @@ public class CustomerService {
     return customerDAO.findAll();
   }
 
+  public Customer findById(Integer id){
+    if (!customerDAO.customerExistsById(id)) {
+      throw new IllegalArgumentException("Customer with id: " + id + " does not exist");
+    }
+
+    return customerDAO.findById(id);
+  }
+  
+
   public Customer findByCpf(String cpf){
     if (!customerDAO.customerExistsByCpf(cpf)) {
-      throw new IllegalArgumentException("Customer with id: " + cpf + " does not exist");
+      throw new IllegalArgumentException("Customer with cpf: " + cpf + " does not exist");
     }
 
     return customerDAO.findByCpf(cpf);
@@ -48,7 +57,7 @@ public class CustomerService {
     }
 
     if(!customerDAO.customerExistsByCpf(customer.getCpf())){ 
-      throw new IllegalArgumentException("Customer with id: " + customer.getCpf() + " does not exists");
+      throw new IllegalArgumentException("Customer with cpf: " + customer.getCpf() + " does not exists");
     }
 
     customerDAO.updateCustomer(customer);
@@ -60,7 +69,7 @@ public class CustomerService {
     }
 
     if(!customerDAO.customerExistsByCpf(customer.getCpf())){
-      throw new IllegalArgumentException("User with id: " + customer.getCpf() + " does not exist");
+      throw new IllegalArgumentException("User with cpf: " + customer.getCpf() + " does not exist");
     }
 
     customerDAO.deleteCustomer(customer);

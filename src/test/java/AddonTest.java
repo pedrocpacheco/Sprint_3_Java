@@ -16,7 +16,7 @@ public class AddonTest {
 
     // * CREATE - Inserindo Addon
     Bicycle bicycle = new BicycleDAO(DB.getOracleConnection()).findById(5);
-    Addon addon = new Addon(1, "Banco", "Caloi", 1050.50, "D", bicycle);
+    Addon addon = new Addon(10, "Banco", "Caloi", 1050.50, "D", bicycle);
 
     addonService.createAddon(addon);
 

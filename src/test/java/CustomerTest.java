@@ -20,6 +20,10 @@ public class CustomerTest {
     List<Customer> customers = customerService.findAll();
     customers.forEach(c -> System.out.println(c.toString()));
 
+    // ? READ - Listando por ID
+    Customer customerById = customerService.findById(customer.getId());
+    System.out.println(customerById.toString());
+
     // ? READ - Listando por CPF
     Customer customerByCpf = customerService.findByCpf(customer.getCpf());
     System.out.println(customerByCpf.toString());
