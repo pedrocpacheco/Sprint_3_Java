@@ -22,7 +22,7 @@ public class BicycleDAO {
     this.conn = connection;
   }
 
-  // Metodo Existe por ID
+  // ? Metodo Existe por ID
   public boolean bicycleExistsById(int id){
       String query = "SELECT id_bicycle FROM tb_bicycle WHERE id_bicycle = ?";
 
